@@ -44,11 +44,14 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.flywheel_example.Flywheel;
 import frc.robot.subsystems.flywheel_example.FlywheelIO;
 import frc.robot.subsystems.flywheel_example.FlywheelIOSim;
+import frc.robot.subsystems.flywheel_example.FlywheelIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.vujh.Vujh;
+import frc.robot.subsystems.vujh.VujhIOSpark;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
 import frc.robot.util.GetJoystickValue;
@@ -72,6 +75,7 @@ public class RobotContainer {
   // These are the "Active Subsystems" that the robot controlls
   private final Drive m_drivebase;
 
+  private final Vujh m_vujh;
   private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
@@ -106,7 +110,8 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // YAGSL drivebase, get config from deploy directory
         m_drivebase = new Drive();
-        m_flywheel = new Flywheel(new FlywheelIOSim()); // new Flywheel(new FlywheelIOTalonFX());
+        m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new FlywheelIOTalonFX());
+        m_vujh = new Vujh(new VujhIOSpark());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -130,6 +135,7 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
+        m_vujh = new Vujh(new VujhIOSpark() {});
         m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
@@ -141,6 +147,7 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
+        m_vujh = new Vujh(new VujhIOSpark() {});
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
@@ -230,6 +237,9 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
+    // driverController.a().whileTrue(Commands.run(() -> m_vujh.setVelocity(1.0), m_vujh));
+    driverController.a().whileTrue(Commands.run(() -> m_vujh.setVelocity(10), m_vujh));
+
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
     driverController
@@ -244,10 +254,10 @@ public class RobotContainer {
                         () -> turnStickX.value()),
                 m_drivebase));
 
-    // Press A button -> BRAKE
-    driverController
-        .a()
-        .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
+    // // Press A button -> BRAKE
+    // driverController
+    //     .a()
+    //     .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
