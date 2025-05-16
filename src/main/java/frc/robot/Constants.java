@@ -317,14 +317,14 @@ public final class Constants {
     // For the double camera mount in the center * Right side
     public static Transform3d robotToCameraECL =
         new Transform3d(
-            Units.inchesToMeters(-13.818 + .8125),
+            Units.inchesToMeters(-12.818 + .8125),
             Units.inchesToMeters(0.0 + .875),
             Units.inchesToMeters(6.122),
             new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
     // For the double camera mount in the center * Left side
     public static Transform3d robotToCameraECR =
         new Transform3d(
-            Units.inchesToMeters(-13.818 + .8125),
+            Units.inchesToMeters(-12.818 + .8125),
             Units.inchesToMeters(0.0 - .875),
             Units.inchesToMeters(6.122),
             new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
