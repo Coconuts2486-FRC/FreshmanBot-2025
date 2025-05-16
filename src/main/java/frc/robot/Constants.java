@@ -296,23 +296,45 @@ public final class Constants {
   /** Vision Camera Posses ************************************************* */
   public static class Cameras {
     // Camera names, must match names configured on coprocessor
-    public static String camera0Name = "camera_0";
-    public static String camera1Name = "camera_1";
+    public static String cameraCL = "Photon_BW7"; //  Camera in the double mount in center *Left
+    public static String cameraCR = "Photon_BW8"; //  Camera in the double mount in center *Right
+
+    // Incorrect distance measurement factor
+    public static double BW7Stretch = 1.00; // 1.02;
+    public static double BW9Stretch = 1.00; // 1.01;
+
     // ... And more, if needed
 
     // Robot to camera transforms
-    // (ONLY USED FOR PHOTONVISION -- Limelight: configure in web UI instead)
-    public static Transform3d robotToCamera0 =
-        new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
-    public static Transform3d robotToCamera1 =
-        new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+    // public static Transform3d robotToCameraEL =
+    //     new Transform3d(
+    //         Units.inchesToMeters(-12.3),
+    //         Units.inchesToMeters(-(9.23 - 0.375)), // Waiting for actual mounts
+    //         Units.inchesToMeters(10.1 - 1.0), // before adding these...
+    //         new Rotation3d(0.0, 0.0, Units.degreesToRadians(180.0 + 20.0))
+    //             .rotateBy(new Rotation3d(0.0, Units.degreesToRadians(25.0), 0.0)));
+
+    // For the double camera mount in the center * Right side
+    public static Transform3d robotToCameraECL =
+        new Transform3d(
+            Units.inchesToMeters(-13.818 + .8125),
+            Units.inchesToMeters(0.0 + .875),
+            Units.inchesToMeters(6.122),
+            new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
+    // For the double camera mount in the center * Left side
+    public static Transform3d robotToCameraECR =
+        new Transform3d(
+            Units.inchesToMeters(-13.818 + .8125),
+            Units.inchesToMeters(0.0 - .875),
+            Units.inchesToMeters(6.122),
+            new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
 
     // Standard deviation multipliers for each camera
     // (Adjust to trust some cameras more than others)
     public static double[] cameraStdDevFactors =
         new double[] {
-          1.0, // Camera 0
-          1.0 // Camera 1
+          1.0, // Camera EL
+          1.0, // Camera ER
         };
   }
 
