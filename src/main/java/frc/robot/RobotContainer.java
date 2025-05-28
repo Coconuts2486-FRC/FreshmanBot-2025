@@ -26,6 +26,8 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -157,6 +159,13 @@ public class RobotContainer {
         break;
     }
 
+    //Score L1 Definition for Autos- pathplanner command
+    NamedCommands.registerCommand(
+      "ScoreL1",
+      Commands.run(() -> m_scorer.setVelocity(3), m_scorer)
+      .withTimeout(0.95)
+      .andThen(Commands.run(() -> m_scorer.stop(), m_scorer))
+    );
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
