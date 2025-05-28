@@ -1,18 +1,18 @@
 // stuff is here
 
-package frc.robot.subsystems.vujh;
+package frc.robot.subsystems.scorer;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-public class VujhIOSpark implements VujhIO {
-  private final SparkMax vujhSparkMax = new SparkMax(21, MotorType.kBrushless);
+public class ScorerIOSpark implements ScorerIO {
+  private final SparkMax scorerSparkMax = new SparkMax(21, MotorType.kBrushless);
 
-  public VujhIOSpark() {}
+  public ScorerIOSpark() {}
 
   @Override
   public void setVelocity(double velocityInput) {
     System.out.println("This is the requested velocity: " + velocityInput);
-    vujhSparkMax.setVoltage(velocityInput);
+    scorerSparkMax.setVoltage(velocityInput);
   }
 }

@@ -1,13 +1,13 @@
 // what?
 
-package frc.robot.subsystems.vujh;
+package frc.robot.subsystems.scorer;
 
 import frc.robot.util.RBSISubsystem;
 
-public class Vujh extends RBSISubsystem {
-  private final VujhIO io;
+public class Scorer extends RBSISubsystem {
+  private final ScorerIO io;
 
-  public Vujh(VujhIO io) {
+  public Scorer(ScorerIO io) {
     this.io = io;
   }
 

@@ -45,13 +45,14 @@ import frc.robot.subsystems.flywheel_example.Flywheel;
 import frc.robot.subsystems.flywheel_example.FlywheelIO;
 import frc.robot.subsystems.flywheel_example.FlywheelIOSim;
 import frc.robot.subsystems.flywheel_example.FlywheelIOSpark;
+import frc.robot.subsystems.scorer.ScorerIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.vujh.Vujh;
-import frc.robot.subsystems.vujh.VujhIOSpark;
+import frc.robot.subsystems.scorer.Scorer;
+import frc.robot.subsystems.scorer.ScorerIOSpark;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
 import frc.robot.util.GetJoystickValue;
@@ -75,7 +76,7 @@ public class RobotContainer {
   // These are the "Active Subsystems" that the robot controlls
   private final Drive m_drivebase;
 
-  private final Vujh m_vujh;
+  private final Scorer m_scorer;
   private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
@@ -111,7 +112,7 @@ public class RobotContainer {
         // YAGSL drivebase, get config from deploy directory
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new FlywheelIOTalonFX());
-        m_vujh = new Vujh(new VujhIOSpark());
+        m_scorer = new Scorer(new ScorerIOSpark());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -135,7 +136,7 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_vujh = new Vujh(new VujhIOSpark() {});
+        m_scorer = new Scorer(new ScorerIOSpark() {});
         m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
@@ -147,7 +148,7 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        m_vujh = new Vujh(new VujhIOSpark() {});
+        m_scorer = new Scorer(new ScorerIOSpark() {});
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
@@ -166,7 +167,7 @@ public class RobotContainer {
       case PATHPLANNER:
         autoChooserPathPlanner =
             new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-        // Set the others to null
+        // Set the others to nullfrc.robot.subsystems.scorer.ScorerIOSpark
         autoChooserChoreo = null;
         autoFactoryChoreo = null;
         break;
@@ -238,7 +239,7 @@ public class RobotContainer {
             () -> -turnStickX.value()));
 
     // driverController.a().whileTrue(Commands.run(() -> m_vujh.setVelocity(1.0), m_vujh));
-    driverController.a().whileTrue(Commands.run(() -> m_vujh.setVelocity(10), m_vujh));
+    driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(10), m_scorer));
 
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
@@ -370,7 +371,7 @@ public class RobotContainer {
   /**
    * Example Choreo auto command
    *
-   * <p>NOTE: This would normally be in a spearate file.
+   * <p>NOTE: This would normally be in a separate file.
    */
   private AutoRoutine twoPieceAuto() {
     AutoRoutine routine = autoFactoryChoreo.newRoutine("twoPieceAuto");

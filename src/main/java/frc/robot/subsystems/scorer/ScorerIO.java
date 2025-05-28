@@ -1,7 +1,7 @@
-package frc.robot.subsystems.vujh;
+package frc.robot.subsystems.scorer;
 
 import frc.robot.util.RBSIIO;
 
-public interface VujhIO extends RBSIIO {
+public interface ScorerIO extends RBSIIO {
   public default void setVelocity(double velocityInput) {}
 }
