@@ -27,7 +27,6 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -47,14 +46,12 @@ import frc.robot.subsystems.flywheel_example.Flywheel;
 import frc.robot.subsystems.flywheel_example.FlywheelIO;
 import frc.robot.subsystems.flywheel_example.FlywheelIOSim;
 import frc.robot.subsystems.flywheel_example.FlywheelIOSpark;
+import frc.robot.subsystems.scorer.Scorer;
 import frc.robot.subsystems.scorer.ScorerIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
-import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOSpark;
 import frc.robot.util.Alert;
 import frc.robot.util.Alert.AlertType;
 import frc.robot.util.GetJoystickValue;
@@ -120,13 +117,15 @@ public class RobotContainer {
               case PHOTON ->
                   new Vision(
                       m_drivebase::addVisionMeasurement,
-                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW7Stretch),
-                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW9Stretch));
+                      //   new VisionIOPhotonVision(cameraElevatorL, robotToCameraEL),
+                      //   new VisionIOPhotonVision(cameraElevatorR, robotToCameraER),
+                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW1Stretch),
+                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW2Stretch)
+                      //   new VisionIOPhotonVision(cameraIntake, robotToCameraIntake, BW4Stretch)
+                      );
               case LIMELIGHT ->
                   new Vision(
-                      m_drivebase::addVisionMeasurement,
-                      new VisionIOLimelight(cameraCL, m_drivebase::getRotation),
-                      new VisionIOLimelight(cameraCR, m_drivebase::getRotation));
+                      m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
               case NONE ->
                   new Vision(
                       m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
@@ -143,8 +142,15 @@ public class RobotContainer {
         m_vision =
             new Vision(
                 m_drivebase::addVisionMeasurement,
+                // new VisionIOPhotonVisionSim(cameraElevatorL, robotToCameraEL,
+                // m_drivebase::getPose),
+                // new VisionIOPhotonVisionSim(cameraElevatorR, robotToCameraER,
+                // m_drivebase::getPose),
                 new VisionIOPhotonVisionSim(cameraCR, robotToCameraECR, m_drivebase::getPose),
-                new VisionIOPhotonVisionSim(cameraCL, robotToCameraECL, m_drivebase::getPose));
+                new VisionIOPhotonVisionSim(cameraCL, robotToCameraECL, m_drivebase::getPose)
+                // new VisionIOPhotonVisionSim(
+                //     cameraIntake, robotToCameraIntake, m_drivebase::getPose)
+                );
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
 
@@ -158,14 +164,13 @@ public class RobotContainer {
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
     }
-//asdjlgfbwduk
-    //Score L1 Definition for Autos- pathplanner command
+    // asdjlgfbwduk
+    // Score L1 Definition for Autos- pathplanner command
     NamedCommands.registerCommand(
-      "ScoreL1",
-      Commands.run(() -> m_scorer.setVelocity(3), m_scorer)
-      .withTimeout(0.95)
-      .andThen(Commands.run(() -> m_scorer.stop(), m_scorer))
-    );
+        "ScoreL1",
+        Commands.run(() -> m_scorer.setVelocity(10), m_scorer)
+            .withTimeout(0.95)
+            .andThen(Commands.run(() -> m_scorer.stop(), m_scorer)));
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
@@ -247,8 +252,10 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    // driverController.a().whileTrue(Commands.run(() -> m_vujh.setVelocity(1.0), m_vujh));
-    driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(10), m_scorer));
+    // Run the scoring rollers
+    driverController
+        .rightBumper()
+        .whileTrue(Commands.run(() -> m_scorer.setVelocity(10), m_scorer));
 
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
@@ -272,9 +279,9 @@ public class RobotContainer {
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
 
-    // Press Y button --> Manually Re-Zero the Gyro
+    // Press start (three bars) button --> Manually Re-Zero the Gyro
     driverController
-        .y()
+        .start()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -283,14 +290,14 @@ public class RobotContainer {
                     m_drivebase)
                 .ignoringDisable(true));
 
-    // Press RIGHT BUMPER --> Run the example flywheel
-    driverController
-        .rightBumper()
-        .whileTrue(
-            Commands.startEnd(
-                () -> m_flywheel.runVelocity(flywheelSpeedInput.get()),
-                m_flywheel::stop,
-                m_flywheel));
+    // Press RIGHT BUMPER --> Run the example flywheel (Disabled)
+    // driverController
+    // .rightBumper()
+    // .whileTrue(
+    //     Commands.startEnd(
+    //         () -> m_flywheel.runVelocity(flywheelSpeedInput.get()),
+    //         m_flywheel::stop,
+    //         m_flywheel));
   }
 
   /**

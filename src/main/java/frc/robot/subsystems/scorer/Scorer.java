@@ -18,5 +18,4 @@ public class Scorer extends RBSISubsystem {
   public void stop() {
     io.setVelocity(0);
   }
-
 }
