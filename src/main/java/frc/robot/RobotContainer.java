@@ -42,12 +42,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.flywheel_example.Flywheel;
-import frc.robot.subsystems.flywheel_example.FlywheelIO;
-import frc.robot.subsystems.flywheel_example.FlywheelIOSim;
-import frc.robot.subsystems.flywheel_example.FlywheelIOSpark;
 import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOSpark;
+import frc.robot.subsystems.scorer.ScorerIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -76,7 +72,7 @@ public class RobotContainer {
   private final Drive m_drivebase;
 
   private final Scorer m_scorer;
-  private final Flywheel m_flywheel;
+  // private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
   private final Vision m_vision;
@@ -110,8 +106,9 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // YAGSL drivebase, get config from deploy directory
         m_drivebase = new Drive();
-        m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new FlywheelIOTalonFX());
-        m_scorer = new Scorer(new ScorerIOSpark());
+        // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
+        // FlywheelIOTalonFX());
+        m_scorer = new Scorer(new ScorerIOTalonFX());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -119,8 +116,8 @@ public class RobotContainer {
                       m_drivebase::addVisionMeasurement,
                       //   new VisionIOPhotonVision(cameraElevatorL, robotToCameraEL),
                       //   new VisionIOPhotonVision(cameraElevatorR, robotToCameraER),
-                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW1Stretch),
-                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW2Stretch)
+                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW7Stretch),
+                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW9Stretch)
                       //   new VisionIOPhotonVision(cameraIntake, robotToCameraIntake, BW4Stretch)
                       );
               case LIMELIGHT ->
@@ -137,8 +134,8 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_scorer = new Scorer(new ScorerIOSpark() {});
-        m_flywheel = new Flywheel(new FlywheelIOSim() {});
+        m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
                 m_drivebase::addVisionMeasurement,
@@ -156,9 +153,9 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        m_scorer = new Scorer(new ScorerIOSpark() {});
+        m_scorer = new Scorer(new ScorerIOTalonFX() {});
         m_drivebase = new Drive();
-        m_flywheel = new Flywheel(new FlywheelIO() {});
+        // m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
             new Vision(m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         m_accel = new Accelerometer(m_drivebase.getGyro());
@@ -174,7 +171,7 @@ public class RobotContainer {
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
-    m_power = new PowerMonitoring(batteryCapacity, m_flywheel);
+    m_power = new PowerMonitoring(batteryCapacity, m_scorer);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
     switch (Constants.getAutoType()) {
@@ -369,18 +366,18 @@ public class RobotContainer {
           m_drivebase.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
       // Example Flywheel SysId Characterization
-      autoChooserPathPlanner.addOption(
-          "Flywheel SysId (Quasistatic Forward)",
-          m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-      autoChooserPathPlanner.addOption(
-          "Flywheel SysId (Quasistatic Reverse)",
-          m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-      autoChooserPathPlanner.addOption(
-          "Flywheel SysId (Dynamic Forward)",
-          m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-      autoChooserPathPlanner.addOption(
-          "Flywheel SysId (Dynamic Reverse)",
-          m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      // autoChooserPathPlanner.addOption(
+      //     "Flywheel SysId (Quasistatic Forward)",
+      //     m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      // autoChooserPathPlanner.addOption(
+      //     "Flywheel SysId (Quasistatic Reverse)",
+      //     m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      // autoChooserPathPlanner.addOption(
+      //     "Flywheel SysId (Dynamic Forward)",
+      //     m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      // autoChooserPathPlanner.addOption(
+      //     "Flywheel SysId (Dynamic Reverse)",
+      //     m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
   }
 
