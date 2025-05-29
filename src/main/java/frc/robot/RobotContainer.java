@@ -112,13 +112,13 @@ public class RobotContainer {
               case PHOTON ->
                   new Vision(
                       m_drivebase::addVisionMeasurement,
-                      new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                      new VisionIOPhotonVision(camera1Name, robotToCamera1));
+                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW7Stretch),
+                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW9Stretch));
               case LIMELIGHT ->
                   new Vision(
                       m_drivebase::addVisionMeasurement,
-                      new VisionIOLimelight(camera0Name, m_drivebase::getRotation),
-                      new VisionIOLimelight(camera1Name, m_drivebase::getRotation));
+                      new VisionIOLimelight(cameraCL, m_drivebase::getRotation),
+                      new VisionIOLimelight(cameraCR, m_drivebase::getRotation));
               case NONE ->
                   new Vision(
                       m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
@@ -134,8 +134,8 @@ public class RobotContainer {
         m_vision =
             new Vision(
                 m_drivebase::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, m_drivebase::getPose),
-                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, m_drivebase::getPose));
+                new VisionIOPhotonVisionSim(cameraCR, robotToCameraECR, m_drivebase::getPose),
+                new VisionIOPhotonVisionSim(cameraCL, robotToCameraECL, m_drivebase::getPose));
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
 
