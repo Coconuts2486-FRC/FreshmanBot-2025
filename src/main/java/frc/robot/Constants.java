@@ -297,7 +297,7 @@ public final class Constants {
   public static class Cameras {
     // Camera names, must match names configured on coprocessor
     public static String cameraCL = "Photon_BW7"; //  Camera in the double mount in center *Left
-    public static String cameraCR = "Photon_BW8"; //  Camera in the double mount in center *Right
+    public static String cameraCR = "Photon_BW9"; //  Camera in the double mount in center *Right
 
     // Incorrect distance measurement factor
     public static double BW7Stretch = 1.00; // 1.02;
