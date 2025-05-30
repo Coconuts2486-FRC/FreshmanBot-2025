@@ -105,7 +105,7 @@ public class Vision extends VirtualSubsystem {
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
       processInputs[i] = (System.nanoTime() - start_pi) / 1.e6;
     }
-    // Logger.recordOutput("Overrides/VisionOdometry", !disableSupplier.getAsBoolean());
+    Logger.recordOutput("Overrides/VisionOdometry", !disableSupplier.getAsBoolean());
 
     // Initialize logging values
     List<Pose3d> allTagPoses = new LinkedList<>();

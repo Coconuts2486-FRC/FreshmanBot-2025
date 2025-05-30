@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
@@ -66,6 +67,13 @@ public class RobotContainer {
 
   final CommandXboxController operatorController = new CommandXboxController(1); // Second Operator
   final OverrideSwitches overrides = new OverrideSwitches(2); // Console toggle switches
+
+  // Define Triggers
+  // private final Trigger elevatorDisable = overrides.Switch(OperatorConstants.ELEVATOR_OVERRIDE);
+  // private final Trigger intakePivotDisable = overrides.Switch(OperatorConstants.INTAKE_OVERRIDE);
+  // private final Trigger algaePivotDisable = overrides.Switch(OperatorConstants.ALGAE_OVERRIDE);
+  private final Trigger visionOdometryDisable =
+      new Trigger(() -> false); // overrides.Switch(OperatorConstants.VISION_OVERRIDE);
 
   /** Declare the robot subsystems here ************************************ */
   // These are the "Active Subsystems" that the robot controlls
@@ -204,6 +212,12 @@ public class RobotContainer {
         throw new RuntimeException(
             "Incorrect AUTO type selected in Constants: " + Constants.getAutoType());
     }
+
+    // Set up subsystem overrides
+    // m_elevator.setOverrides(elevatorDisable);
+    // m_intake.setOverrides(intakePivotDisable);
+    // m_algaeMech.setOverrides(algaePivotDisable);
+    m_vision.setOverrides(visionOdometryDisable);
 
     // Define Auto commands
     defineAutoCommands();
