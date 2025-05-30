@@ -44,8 +44,8 @@ public class FlywheelIOSpark implements FlywheelIO {
   // Define the leader / follower motors from the Ports section of RobotContainer
   private final SparkBase leader =
       new SparkMax(CANandPowerPorts.FLYWHEEL_LEADER.getDeviceNumber(), MotorType.kBrushless);
-  private final SparkBase follower =
-      new SparkMax(CANandPowerPorts.FLYWHEEL_LEADER.getDeviceNumber(), MotorType.kBrushless);
+  // private final SparkBase follower =
+  //     new SparkMax(CANandPowerPorts.FLYWHEEL_LEADER.getDeviceNumber(), MotorType.kBrushless);
   private final RelativeEncoder encoder = leader.getEncoder();
   private final SparkClosedLoopController pid = leader.getClosedLoopController();
   // IMPORTANT: Include here all devices listed above that are part of this mechanism!
@@ -97,7 +97,7 @@ public class FlywheelIOSpark implements FlywheelIO {
     inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / kFlywheelGearRatio);
     inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
-    inputs.currentAmps = new double[] {leader.getOutputCurrent(), follower.getOutputCurrent()};
+    inputs.currentAmps = new double[] {leader.getOutputCurrent(), leader.getOutputCurrent()};
   }
 
   @Override

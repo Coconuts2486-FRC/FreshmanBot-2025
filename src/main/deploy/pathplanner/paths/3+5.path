@@ -1,0 +1,68 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.446472709577645,
+        "y": 7.2114671101749135
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1627951634447125,
+        "y": 6.729535983774329
+      },
+      "isLocked": false,
+      "linkedName": "2"
+    },
+    {
+      "anchor": {
+        "x": 3.6117557460541203,
+        "y": 5.42791435580433
+      },
+      "prevControl": {
+        "x": 3.0120411782166223,
+        "y": 5.856928156634678
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7260544143356642,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 5.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -59.81715291119017
+  },
+  "reversed": false,
+  "folder": "Foural Test",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -55.27958713562295
+  },
+  "useDefaultConstraints": false
+}
