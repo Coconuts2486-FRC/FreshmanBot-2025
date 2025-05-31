@@ -1,0 +1,6 @@
+Controls for Peanut 
+
+Right Bumper: Run scorer motor at 90%
+Left Bumper: Run scorer motor at 50%
+X: Put wheels into x-lock
+Start (3 Bars): Zero Gyro
