@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Accuracy Test"
+            "pathName": "Single-Scoring Middle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL1"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Tests",
+  "folder": null,
   "choreoAuto": false
 }

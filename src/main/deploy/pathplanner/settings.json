@@ -1,11 +1,16 @@
 {
-  "robotWidth": 0.75,
-  "robotLength": 0.75,
+  "robotWidth": 0.812,
+  "robotLength": 0.812,
   "holonomicMode": true,
   "pathFolders": [
-    "Foural Test"
+    "Basics",
+    "Starts",
+    "Station Paths",
+    "Tests"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Tests"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
@@ -14,10 +19,10 @@
   "robotMass": 25.0,
   "robotMOI": 6.883,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.048,
-  "driveGearing": 6.12,
+  "driveWheelRadius": 0.044,
+  "driveGearing": 6.746,
   "maxDriveSpeed": 4.5,
-  "driveMotorType": "krakenX60FOC",
+  "driveMotorType": "falcon500",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,
   "flModuleX": 0.273,
