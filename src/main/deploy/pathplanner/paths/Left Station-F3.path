@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 2.183778409090909,
-        "y": 2.4694318181818176
+        "y": 2.469431818181818
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Station Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 1.397181027296352
+    "rotation": 178.7269699799432
   },
   "useDefaultConstraints": false
 }

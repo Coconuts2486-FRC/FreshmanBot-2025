@@ -87,6 +87,38 @@ public class DriveCommands {
         drive);
   }
 
+  public static Command fastFieldRelativeDrive(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier) {
+    return Commands.run(
+        () -> {
+          // Get the Linear Velocity & Omega from inputs
+          Translation2d linearVelocity =
+              getLinearVelocity(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+          double omega = getOmega(omegaSupplier.getAsDouble());
+
+          // Convert to field relative speeds & send command
+          ChassisSpeeds speeds =
+              new ChassisSpeeds(
+                  linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec()*1.5,
+                  linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec()*1.5
+                  ,
+                  omega * drive.getMaxAngularSpeedRadPerSec());
+          boolean isFlipped =
+              DriverStation.getAlliance().isPresent()
+                  && DriverStation.getAlliance().get() == Alliance.Red;
+          drive.runVelocity(
+              ChassisSpeeds.fromFieldRelativeSpeeds(
+                  speeds,
+                  isFlipped
+                      ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                      : drive.getRotation()));
+        },
+        drive);
+  }
+
   /**
    * Robot relative drive command using two joysticks (controlling linear and angular velocities).
    */

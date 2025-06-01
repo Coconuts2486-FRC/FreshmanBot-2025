@@ -72,8 +72,7 @@ public class RobotContainer {
   // private final Trigger elevatorDisable = overrides.Switch(OperatorConstants.ELEVATOR_OVERRIDE);
   // private final Trigger intakePivotDisable = overrides.Switch(OperatorConstants.INTAKE_OVERRIDE);
   // private final Trigger algaePivotDisable = overrides.Switch(OperatorConstants.ALGAE_OVERRIDE);
-  private final Trigger visionOdometryDisable =
-      new Trigger(() -> false); // overrides.Switch(OperatorConstants.VISION_OVERRIDE);
+  private final Trigger visionOdometryDisable = overrides.Switch(OperatorConstants.VISION_OVERRIDE);
 
   /** Declare the robot subsystems here ************************************ */
   // These are the "Active Subsystems" that the robot controlls
@@ -263,6 +262,11 @@ public class RobotContainer {
             () -> -driveStickY.value(),
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
+
+    driverController.a().whileTrue(DriveCommands.fastFieldRelativeDrive(m_drivebase,
+    () -> -driveStickY.value(),
+    () -> -driveStickX.value(),
+    () -> -turnStickX.value()));
 
     // Run the scoring rollers
     driverController

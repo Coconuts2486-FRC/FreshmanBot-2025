@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.948750000004814,
-        "y": 5.5307102272700535
+        "x": 3.5201388888888885,
+        "y": 5.265025252525252
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.173806818181818,
-        "y": 6.7671875
+        "x": 1.9696304422254443,
+        "y": 6.718337060722419
       },
       "isLocked": false,
       "linkedName": "Face 2"
@@ -20,8 +20,8 @@
         "y": 7.257196969694494
       },
       "prevControl": {
-        "x": 2.1243371212168203,
-        "y": 6.828418560603584
+        "x": 1.9597972351269517,
+        "y": 6.757648006970955
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.13010235415601
+    "rotation": 125.33037556911138
   },
   "reversed": false,
   "folder": "Station Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.74356283647069
+    "rotation": 120.66036040462026
   },
   "useDefaultConstraints": false
 }

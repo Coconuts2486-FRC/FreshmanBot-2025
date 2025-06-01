@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.081863292074204,
-        "y": 5.676714670219766
+        "x": 2.6593349765692826,
+        "y": 6.386792501927216
       },
       "isLocked": false,
       "linkedName": "Station Right"
     },
     {
       "anchor": {
-        "x": 3.5201388888888885,
-        "y": 5.265025252525252
+        "x": 3.8758838383838388,
+        "y": 5.468308080808081
       },
       "prevControl": {
-        "x": 2.9504181299680257,
-        "y": 5.798889587929688
+        "x": 2.956843255186355,
+        "y": 6.087786329810943
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Face 2"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.66036040462026
+    "rotation": 119.44291377044408
   },
   "reversed": false,
   "folder": "Station Paths",

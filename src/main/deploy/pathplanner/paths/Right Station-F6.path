@@ -20,7 +20,7 @@
         "y": 7.257196969694494
       },
       "prevControl": {
-        "x": 4.477632575762274,
+        "x": 4.477632575762275,
         "y": 7.157481060603584
       },
       "nextControl": null,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.13010235415601
+    "rotation": 125.33037556911138
   },
   "reversed": false,
   "folder": "Station Paths",
