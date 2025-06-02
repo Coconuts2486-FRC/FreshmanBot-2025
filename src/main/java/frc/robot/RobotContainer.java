@@ -263,10 +263,14 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    driverController.a().whileTrue(DriveCommands.fastFieldRelativeDrive(m_drivebase,
-    () -> -driveStickY.value(),
-    () -> -driveStickX.value(),
-    () -> -turnStickX.value()));
+    driverController
+        .a()
+        .whileTrue(
+            DriveCommands.fastFieldRelativeDrive(
+                m_drivebase,
+                () -> -driveStickY.value(),
+                () -> -driveStickX.value(),
+                () -> -turnStickX.value()));
 
     // Run the scoring rollers
     driverController
