@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.6014520202020206,
-        "y": 1.240025252525253
+        "y": 1.2400252525252533
       },
       "isLocked": false,
       "linkedName": "Face 5"
@@ -48,7 +48,7 @@
   "folder": "Station Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 121.42956561483858
+    "rotation": -59.8586144479248
   },
   "useDefaultConstraints": false
 }

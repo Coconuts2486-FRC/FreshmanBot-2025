@@ -48,7 +48,7 @@
   "folder": "Station Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.93141717813759
+    "rotation": -122.00538320808352
   },
   "useDefaultConstraints": false
 }
