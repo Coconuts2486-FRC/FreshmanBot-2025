@@ -43,8 +43,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOTalonFX;
+import frc.robot.subsystems.ground_intake.Center;
+import frc.robot.subsystems.ground_intake.CenterIOTalonFX;
+import frc.robot.subsystems.ground_intake.Intake;
+import frc.robot.subsystems.ground_intake.IntakeIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -79,7 +81,10 @@ public class RobotContainer {
   // These are the "Active Subsystems" that the robot controlls
   private final Drive m_drivebase;
 
-  private final Scorer m_scorer;
+  // Define Ground Intake Elements
+  private final Intake m_intake;
+  private final Center m_center;
+
   // private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
@@ -116,7 +121,8 @@ public class RobotContainer {
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
         // FlywheelIOTalonFX());
-        m_scorer = new Scorer(new ScorerIOTalonFX());
+        m_intake = new Intake(new IntakeIOTalonFX());
+        m_center = new Center(new CenterIOTalonFX());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -142,7 +148,8 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_intake = new Intake(new IntakeIOTalonFX() {});
+        m_center = new Center(new CenterIOTalonFX());
         // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
@@ -161,7 +168,8 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_intake = new Intake(new IntakeIOTalonFX() {});
+        m_center = new Center(new CenterIOTalonFX());
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
@@ -173,20 +181,28 @@ public class RobotContainer {
     // Score L1 Definition for Autos- pathplanner command
     NamedCommands.registerCommand(
         "ScoreL1",
-        Commands.run(() -> m_scorer.setVelocity(10), m_scorer)
+        Commands.run(() -> m_intake.setIntakeVelocity(10), m_intake)
             .withTimeout(0.95)
-            .andThen(Commands.run(() -> m_scorer.stop(), m_scorer)));
+            .andThen(Commands.run(() -> m_intake.stop(), m_intake)));
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
+    
+    /* Theoretical Code for Ground Intake in Auto */
+
+    //NamedCommands.registerCommand(
+     // "IntakeSequence",
+      //Commands.run [Pivot Down Function]
+      //Commands.run(() -> m_intake.setIntakeVelocity());
+    //);
     // ``m_drivebase``, as that is automatically monitored.
-    m_power = new PowerMonitoring(batteryCapacity, m_scorer);
+    m_power = new PowerMonitoring(batteryCapacity, m_intake);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
     switch (Constants.getAutoType()) {
       case PATHPLANNER:
         autoChooserPathPlanner =
             new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-        // Set the others to nullfrc.robot.subsystems.scorer.ScorerIOSpark
+        // Set the others to nullfrc.robot.subsystems.Intake.IntakeIOSpark
         autoChooserChoreo = null;
         autoFactoryChoreo = null;
         break;
@@ -263,11 +279,26 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    // Run the scoring rollers
+    // Ground Intake Sequence
     driverController
         .rightBumper()
-        .whileTrue(Commands.run(() -> m_scorer.setVelocity(10), m_scorer));
-
+        //.whileTrue [Pivot Down Code]
+        .whileTrue(Commands.run(() -> m_intake.setIntakeVelocity(10), m_intake));
+    
+    driverController
+      .rightBumper()
+      .onFalse(
+        Commands.run(
+                () -> m_intake.setIntakeVelocity(.2), m_intake)
+                //() -> [Pivot Up]
+                .withTimeout(.5));
+    driverController
+      .rightBumper()
+      .onFalse(
+        Commands.run(
+                () -> m_center.setCenterVelocity(.7), m_center)
+                //() -> [Pivot Up]
+                .withTimeout(.5));
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
     driverController

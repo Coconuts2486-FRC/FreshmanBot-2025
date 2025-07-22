@@ -1,0 +1,3 @@
+Ground intake path: Intake(hold)> set to standby pos> run intake motors at 10%, center at 75%> hold
+Ground to Elevator path: Press Elevator Button> Start arm intake motor> pivot ground to arm> center then eject coral> go to height> pivot ground to standby
+Elevator to Ground path: Release elevator button> send elevator down> pivot ground to arm> eject coral from arm> pivot ground to standby
