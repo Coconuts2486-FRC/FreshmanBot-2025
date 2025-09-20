@@ -135,7 +135,7 @@ public final class Constants {
     // Theoretical free speed (m/s) at 12v applied output;
     // IMPORTANT: Follow the AdvantageKit instructions for measuring the ACTUAL maximum linear speed
     // of YOUR ROBOT, and replace the estimate here with your measured value!
-    public static final double kMaxLinearSpeed = Units.feetToMeters(30);
+    public static final double kMaxLinearSpeed = Units.feetToMeters(20);
 
     // Set 3/4 of a rotation per second as the max angular velocity (radians/sec)
     public static final double kMaxAngularSpeed = 1.5 * Math.PI;
