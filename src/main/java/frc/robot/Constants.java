@@ -135,7 +135,7 @@ public final class Constants {
     // Theoretical free speed (m/s) at 12v applied output;
     // IMPORTANT: Follow the AdvantageKit instructions for measuring the ACTUAL maximum linear speed
     // of YOUR ROBOT, and replace the estimate here with your measured value!
-    public static final double kMaxLinearSpeed = Units.feetToMeters(30);
+    public static final double kMaxLinearSpeed = Units.feetToMeters(20);
 
     // Set 3/4 of a rotation per second as the max angular velocity (radians/sec)
     public static final double kMaxAngularSpeed = 1.5 * Math.PI;
@@ -233,7 +233,7 @@ public final class Constants {
     public static final int OPERATOR_SWITCH_1 = 9;
     public static final int OPERATOR_SWITCH_2 = 10;
     public static final int OPERATOR_SWITCH_3 = 11;
-    public static final int OPERATOR_SWITCH_4 = 12;
+    public static final int VISION_OVERRIDE = 12;
 
     public static final int[] MULTI_TOGGLE = {4, 5};
   }

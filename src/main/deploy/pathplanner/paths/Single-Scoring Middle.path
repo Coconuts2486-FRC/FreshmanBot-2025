@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.67325,
-        "y": 6.76475
+        "x": 7.119715909090909,
+        "y": 4.084829545454545
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.446000000000001,
-        "y": 8.5375
+        "x": 6.571278409090909,
+        "y": 4.174573863636363
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Start Middle"
     },
     {
       "anchor": {
-        "x": 0.7977272727272726,
-        "y": 6.388267045454545
+        "x": 5.972982954545454,
+        "y": 3.7956534090909084
       },
       "prevControl": {
-        "x": 1.424324805539624,
-        "y": 7.262892768338451
-      },
-      "nextControl": {
-        "x": 0.319090909090909,
-        "y": 5.720170454545454
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.851875,
-        "y": 3.7358238636363628
-      },
-      "prevControl": {
-        "x": 2.702301136363637,
-        "y": -0.08974431818181827
+        "x": 6.4915056818181816,
+        "y": 4.174573863636363
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 1.3322198538696703
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Basic Autos",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -23.62937773065674
   },
   "useDefaultConstraints": true
 }

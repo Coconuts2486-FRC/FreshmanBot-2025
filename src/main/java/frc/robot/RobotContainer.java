@@ -72,8 +72,7 @@ public class RobotContainer {
   // private final Trigger elevatorDisable = overrides.Switch(OperatorConstants.ELEVATOR_OVERRIDE);
   // private final Trigger intakePivotDisable = overrides.Switch(OperatorConstants.INTAKE_OVERRIDE);
   // private final Trigger algaePivotDisable = overrides.Switch(OperatorConstants.ALGAE_OVERRIDE);
-  private final Trigger visionOdometryDisable =
-      new Trigger(() -> false); // overrides.Switch(OperatorConstants.VISION_OVERRIDE);
+  private final Trigger visionOdometryDisable = overrides.Switch(OperatorConstants.VISION_OVERRIDE);
 
   /** Declare the robot subsystems here ************************************ */
   // These are the "Active Subsystems" that the robot controlls
@@ -173,9 +172,10 @@ public class RobotContainer {
     // Score L1 Definition for Autos- pathplanner command
     NamedCommands.registerCommand(
         "ScoreL1",
-        Commands.run(() -> m_scorer.setVelocity(10), m_scorer)
-            .withTimeout(0.95)
+        Commands.run(() -> m_scorer.setVelocity(.9), m_scorer)
+            .withTimeout(0.2)
             .andThen(Commands.run(() -> m_scorer.stop(), m_scorer)));
+
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
@@ -263,10 +263,22 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
+    driverController
+        .a()
+        .whileTrue(
+            DriveCommands.fastFieldRelativeDrive(
+                m_drivebase,
+                () -> -driveStickY.value(),
+                () -> -driveStickX.value(),
+                () -> -turnStickX.value()));
+
     // Run the scoring rollers
     driverController
         .rightBumper()
-        .whileTrue(Commands.run(() -> m_scorer.setVelocity(10), m_scorer));
+        .whileTrue(Commands.run(() -> m_scorer.setVelocity(.9), m_scorer));
+
+    // Slower because I don't trust running it at max speed
+    driverController.leftBumper().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5), m_scorer));
 
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC

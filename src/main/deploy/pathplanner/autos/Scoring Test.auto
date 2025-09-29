@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Spin Test"
+            "pathName": "Scorer Test"
           }
         },
         {
@@ -27,11 +27,17 @@
           "data": {
             "waitTime": 0.2
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreL1"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Tests",
   "choreoAuto": false
 }
