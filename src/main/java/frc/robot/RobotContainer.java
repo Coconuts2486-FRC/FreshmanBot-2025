@@ -40,6 +40,8 @@ import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
+import frc.robot.subsystems.dinosaur.dinosaur;
+import frc.robot.subsystems.dinosaur.dinosaurIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.flywheel_example.Flywheel;
 import frc.robot.subsystems.flywheel_example.FlywheelIO;
@@ -73,6 +75,7 @@ public class RobotContainer {
   private final Drive m_drivebase;
 
   private final Flywheel m_flywheel;
+  private final dinosaur m_dinosaur;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
   private final Vision m_vision;
@@ -107,6 +110,7 @@ public class RobotContainer {
         // YAGSL drivebase, get config from deploy directory
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIOSim()); // new Flywheel(new FlywheelIOTalonFX());
+        m_dinosaur = new dinosaur(new dinosaurIOTalonFX());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -131,6 +135,7 @@ public class RobotContainer {
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIOSim() {});
+        m_dinosaur = new dinosaur(new dinosaurIOTalonFX());
         m_vision =
             new Vision(
                 m_drivebase::addVisionMeasurement,
@@ -143,6 +148,7 @@ public class RobotContainer {
         // Replayed robot, disable IO implementations
         m_drivebase = new Drive();
         m_flywheel = new Flywheel(new FlywheelIO() {});
+        m_dinosaur = new dinosaur(new dinosaurIOTalonFX());
         m_vision =
             new Vision(m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         m_accel = new Accelerometer(m_drivebase.getGyro());
@@ -244,10 +250,10 @@ public class RobotContainer {
                         () -> turnStickX.value()),
                 m_drivebase));
 
-    // Press A button -> BRAKE
-    driverController
-        .a()
-        .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
+    // // Press A button -> BRAKE
+    // driverController
+    //     .a()
+    //     .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
@@ -271,6 +277,14 @@ public class RobotContainer {
                 () -> m_flywheel.runVelocity(flywheelSpeedInput.get()),
                 m_flywheel::stop,
                 m_flywheel));
+
+    driverController.rightBumper().whileTrue(Commands.run(() -> m_flywheel.runVelocity(.314159)));
+
+    driverController.a().whileTrue(Commands.run(() -> m_dinosaur.setVelocity(.314159)));
+
+    driverController.a().whileFalse(Commands.run(() -> m_dinosaur.setVelocity(0)));
+
+    driverController.a() .whileFalse(Commands.run(() -> m_dinosar.stopVelocity));
   }
 
   /**
