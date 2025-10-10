@@ -175,16 +175,40 @@ public class RobotContainer {
         break;
     }
     // look here
-    // Score L1 Definition for Autos- pathplanner command
-    NamedCommands.registerCommand(
-        "ScoreL1",
-        Commands.parallel(
-        Commands.run(() -> m_scorer.setVelocity(.5));
-        Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
+    
+    /**********************
+     This command already exists dont make another one
+     */
+    //NamedCommands.registerCommand(
+        // "ScoreL1",
+        // Commands.parallel(
+        // Commands.run(() -> m_scorer.setVelocity(.5));
+        // Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
 
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
+
+    NamedCommands.registerCommand(
+      "PivotToScore",
+      Commands.run(() -> m_pivot.goUntilPosition(0.5,8)));
+    
+    NamedCommands.registerCommand(
+      "PivotToLollipop",
+      Commands.run(() -> m_pivot.goUntilPosition(0.5,4)));
+
+    NamedCommands.registerCommand(
+      "PivotToGround",
+      Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)));
+
+    NamedCommands.registerCommand(
+      "ShootSlow",
+      Commands.run(() -> m_scorer.setVelocity(0.3)));
+
+    NamedCommands.registerCommand(
+      "Intake", 
+      Commands.run(() -> m_scorer.setVelocity(-0.5)));
+    
     m_power = new PowerMonitoring(batteryCapacity, m_scorer);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
@@ -269,36 +293,50 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
+
+    //Coral Scorer Commands//        
+    // Slow Score
     driverController
         .a()
-        .whileTrue(
-            DriveCommands.fastFieldRelativeDrive(
-                m_drivebase,
-                () -> -driveStickY.value(),
-                () -> -driveStickX.value(),
-                () -> -turnStickX.value()));
-
-    // Run the scoring rollers
+        .whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
     driverController
-        .rightBumper()
-        .whileTrue(Commands.run(() -> m_scorer.setVelocity(.9), m_scorer));
+        .rightTrigger()
+        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
+    
+    //Intake from Ground
+    driverController
+      .leftTrigger()
+      .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
 
-    // Slower because I don't trust running it at max speed
-    driverController.leftBumper().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5), m_scorer));
+    driverController
+      .leftTrigger()
+      .whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.4)));
+
+    //Intake algae from Ground
+    driverController
+      .leftBumper()
+      .whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.7)));
+    
+    driverController
+      .leftBumper()
+      .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
+    
+    
+    
 
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
-    driverController
-        .b()
-        .onTrue(
-            Commands.runOnce(
-                () ->
-                    DriveCommands.robotRelativeDrive(
-                        m_drivebase,
-                        () -> -driveStickY.value(),
-                        () -> -driveStickX.value(),
-                        () -> turnStickX.value()),
-                m_drivebase));
+    // driverController
+    //     .b()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () ->
+    //                 DriveCommands.robotRelativeDrive(
+    //                     m_drivebase,
+    //                     () -> -driveStickY.value(),
+    //                     () -> -driveStickX.value(),
+    //                     () -> turnStickX.value()),
+    //             m_drivebase));
 
     // // Press A button -> BRAKE
     // driverController
