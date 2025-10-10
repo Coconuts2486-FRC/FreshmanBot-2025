@@ -2,7 +2,6 @@ package frc.robot.subsystems.scorer;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
@@ -29,7 +28,7 @@ public class PivotIOTalonFX implements PivotIO {
     return groundPivotEncoder.get();
   }
 
-  // PID
+  // PID (pain, incineration, and destruction)
 
   @Override
   public void configPID(double kP, double kI, double kD) {
@@ -37,7 +36,6 @@ public class PivotIOTalonFX implements PivotIO {
     pid.withKP(kP);
     pid.withKI(kI);
     pid.withKD(kD);
-    
-    .getConfigurator().apply(pid);
+    Pivot.getConfigurator().apply(pid);
   }
 }

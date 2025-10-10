@@ -45,6 +45,8 @@ import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Scorer;
 import frc.robot.subsystems.scorer.ScorerIOTalonFX;
+import frc.robot.subsystems.scorer.Pivot;
+import frc.robot.subsystems.scorer.PivotIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -79,6 +81,7 @@ public class RobotContainer {
   private final Drive m_drivebase;
 
   private final Scorer m_scorer;
+  private final Pivot m_pivot;
   // private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
@@ -116,6 +119,7 @@ public class RobotContainer {
         // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
         // FlywheelIOTalonFX());
         m_scorer = new Scorer(new ScorerIOTalonFX());
+        m_pivot = new Pivot(new PivotIOTalonFX(){});
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -142,6 +146,7 @@ public class RobotContainer {
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
         m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_pivot = new Pivot(new PivotIOTalonFX(){});
         // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
@@ -161,6 +166,7 @@ public class RobotContainer {
       default:
         // Replayed robot, disable IO implementations
         m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_pivot = new Pivot(new PivotIOTalonFX() {});
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
@@ -168,13 +174,13 @@ public class RobotContainer {
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
     }
-    // asdjlgfbwduk
+    // look here
     // Score L1 Definition for Autos- pathplanner command
     NamedCommands.registerCommand(
         "ScoreL1",
-        Commands.run(() -> m_scorer.setVelocity(.9), m_scorer)
-            .withTimeout(0.2)
-            .andThen(Commands.run(() -> m_scorer.stop(), m_scorer)));
+        Commands.parallel(
+        Commands.run(() -> m_scorer.setVelocity(.5));
+        Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
 
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include

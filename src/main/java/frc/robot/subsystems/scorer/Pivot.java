@@ -9,7 +9,7 @@ public class Pivot extends RBSISubsystem {
 
   public Pivot(PivotIO io) {
     this.io = io;
-    io.configPID(1,0,0);
+    io.configPID(1, 0, 0);
   }
 
   public void setVelocity(double velocityInput) {
