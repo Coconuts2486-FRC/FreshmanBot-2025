@@ -5,15 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Single-Scoring Middle"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Start Right to Intake Right"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreL1"
+            "name": null
           }
         }
       ]

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4263257575804564,
-        "y": 7.257196969694494
+        "x": 2.805122950819672,
+        "y": 4.1448770491803275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8103563105601839,
-        "y": 6.333451761908084
+        "x": 2.5207733702191133,
+        "y": 2.9573849822407965
       },
       "isLocked": false,
-      "linkedName": "Station Right"
+      "linkedName": "Face 3"
     },
     {
       "anchor": {
-        "x": 2.8899621212121214,
-        "y": 3.6997474747474746
+        "x": 1.4864754098360655,
+        "y": 2.4066598360655735
       },
       "prevControl": {
-        "x": 2.2607843179362197,
-        "y": 5.344866642642524
+        "x": 2.167555458731753,
+        "y": 3.2297642503519763
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left Lollipop"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 5.0,
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.397181027296352
+    "rotation": 46.735704588928265
   },
   "reversed": false,
   "folder": "Station Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 125.33037556911138
+    "rotation": 180.0
   },
   "useDefaultConstraints": false
 }
