@@ -43,10 +43,10 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOTalonFX;
 import frc.robot.subsystems.scorer.Pivot;
 import frc.robot.subsystems.scorer.PivotIOTalonFX;
+import frc.robot.subsystems.scorer.Scorer;
+import frc.robot.subsystems.scorer.ScorerIOTalonFX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -119,7 +119,7 @@ public class RobotContainer {
         // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
         // FlywheelIOTalonFX());
         m_scorer = new Scorer(new ScorerIOTalonFX());
-        m_pivot = new Pivot(new PivotIOTalonFX(){});
+        m_pivot = new Pivot(new PivotIOTalonFX() {});
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
@@ -146,7 +146,7 @@ public class RobotContainer {
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
         m_scorer = new Scorer(new ScorerIOTalonFX() {});
-        m_pivot = new Pivot(new PivotIOTalonFX(){});
+        m_pivot = new Pivot(new PivotIOTalonFX() {});
         // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
@@ -175,40 +175,36 @@ public class RobotContainer {
         break;
     }
     // look here
-    
+
     /**********************
-     This command already exists dont make another one
+     * This command already exists dont make another one
      */
-    //NamedCommands.registerCommand(
-        // "ScoreL1",
-        // Commands.parallel(
-        // Commands.run(() -> m_scorer.setVelocity(.5));
-        // Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
+    // NamedCommands.registerCommand(
+    // "ScoreL1",
+    // Commands.parallel(
+    // Commands.run(() -> m_scorer.setVelocity(.5));
+    // Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
 
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
 
     NamedCommands.registerCommand(
-      "PivotToScore",
-      Commands.run(() -> m_pivot.goUntilPosition(0.5,8)));
+        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(0.5, 8)));
+
+    NamedCommands.registerCommand(
+        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(0.5, 4)));
+
+    NamedCommands.registerCommand(
+        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)));
     
     NamedCommands.registerCommand(
-      "PivotToLollipop",
-      Commands.run(() -> m_pivot.goUntilPosition(0.5,4)));
+      "PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(.4, 7)));
 
-    NamedCommands.registerCommand(
-      "PivotToGround",
-      Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)));
+    NamedCommands.registerCommand("ShootSlow", Commands.run(() -> m_scorer.setVelocity(0.3)));
 
-    NamedCommands.registerCommand(
-      "ShootSlow",
-      Commands.run(() -> m_scorer.setVelocity(0.3)));
+    NamedCommands.registerCommand("Intake", Commands.run(() -> m_scorer.setVelocity(-0.5)));
 
-    NamedCommands.registerCommand(
-      "Intake", 
-      Commands.run(() -> m_scorer.setVelocity(-0.5)));
-    
     m_power = new PowerMonitoring(batteryCapacity, m_scorer);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
@@ -293,36 +289,24 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
+    m_pivot.setDefaultCommand(Commands.run(() -> m_pivot.goUntilPosition(.2, 10)));
 
-    //Coral Scorer Commands//        
+    m_scorer.setDefaultCommand(Commands.run(() -> m_scorer.setVelocity(-0.05)));
+
+    // Coral Scorer Commands//
     // Slow Score
-    driverController
-        .a()
-        .whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
-    driverController
-        .rightTrigger()
-        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
-    
-    //Intake from Ground
-    driverController
-      .leftTrigger()
-      .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
+    driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
+    driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
 
-    driverController
-      .leftTrigger()
-      .whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.4)));
+    // Intake from Ground
+    driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
 
-    //Intake algae from Ground
-    driverController
-      .leftBumper()
-      .whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.7)));
-    
-    driverController
-      .leftBumper()
-      .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
-    
-    
-    
+    driverController.leftTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.4)));
+
+    // Intake algae from Ground
+    driverController.leftBumper().whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.7)));
+
+    driverController.leftBumper().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
 
     // ** Example Commands -- Remap, remove, or change as desired **
     // Press B button while driving --> ROBOT-CENTRIC
