@@ -4,7 +4,6 @@
   "holonomicMode": true,
   "pathFolders": [
     "Basic Autos",
-    "Starts",
     "Station Paths",
     "Tests"
   ],

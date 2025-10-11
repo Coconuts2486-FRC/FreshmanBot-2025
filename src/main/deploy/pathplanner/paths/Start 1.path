@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.2165983606557385,
-        "y": 7.225717213114755
+        "x": 7.132684426222206,
+        "y": 7.213729508195636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.070799180333923,
-        "y": 7.573360655738854
+        "x": 5.598258196714011,
+        "y": 7.393545081966128
       },
       "isLocked": false,
       "linkedName": null
@@ -20,28 +20,28 @@
         "y": 5.847131147542134
       },
       "prevControl": {
-        "x": 1.9420081967273655,
-        "y": 7.213729508197872
+        "x": 1.4385245901566326,
+        "y": 7.2856557377038325
       },
       "nextControl": {
-        "x": 1.0369129363184728,
-        "y": 5.190575396695641
+        "x": 1.301035190386682,
+        "y": 5.452463740547072
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8410860655737706,
-        "y": 4.288729508196721
+        "x": 3.3445696721311475,
+        "y": 5.3196721311475414
       },
       "prevControl": {
-        "x": 2.013934426229509,
-        "y": 4.6963114754098365
+        "x": 1.5943647540910582,
+        "y": 5.175819672130062
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "face 2 but better"
     }
   ],
   "rotationTargets": [],
@@ -49,7 +49,7 @@
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 3.0,
+        "x": 2.3,
         "y": 7.6
       },
       "rotationOffset": 0.0,
@@ -69,7 +69,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.35775354279127
   },
   "reversed": false,
   "folder": "Station Paths",
