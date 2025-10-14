@@ -7,37 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Start right to F5"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.2
+            "pathName": "F5 to F4"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ScoreL1"
+            "pathName": "F4 to F3"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ScoreL1"
+            "pathName": "F3 to F2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Tests",
+  "folder": null,
   "choreoAuto": false
 }

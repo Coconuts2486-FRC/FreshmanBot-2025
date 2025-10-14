@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 7.0967213114754095,
+        "y": 1.2798155737704917
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2403818877279202,
-        "y": 6.931322870965936
+        "x": 6.859550486962781,
+        "y": 1.2007586322662835
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 4.663217213114754,
+        "y": 0.6085040983606563
       },
       "prevControl": {
-        "x": 1.730423025336413,
-        "y": 7.07679828789446
+        "x": 5.226639344262296,
+        "y": 0.5365778688524608
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Basic Autos",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

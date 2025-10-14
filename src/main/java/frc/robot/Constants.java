@@ -232,7 +232,7 @@ public final class Constants {
     public static final int OPERATOR_SWITCH_0 = 8;
     public static final int OPERATOR_SWITCH_1 = 9;
     public static final int OPERATOR_SWITCH_2 = 10;
-    public static final int OPERATOR_SWITCH_3 = 11;
+    public static final int SCORER_OVERRIDE = 11;
     public static final int VISION_OVERRIDE = 12;
 
     public static final int[] MULTI_TOGGLE = {4, 5};
