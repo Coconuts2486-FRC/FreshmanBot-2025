@@ -377,6 +377,8 @@ public final class Constants {
     public static final RobotDeviceId PIGEON =
         new RobotDeviceId(SwerveConstants.kPigeonId, SwerveConstants.kCANbusName, null);
 
+    public static final RobotDeviceId PIVOT = new RobotDeviceId(31, "", null);
+
     /* SUBSYSTEM CAN DEVICE IDS */
     // This is where mechanism subsystem devices are defined (Including ID, bus, and power port)
     // Example:

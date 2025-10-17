@@ -46,7 +46,7 @@ import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
 import frc.robot.subsystems.scorer.PivotIOTalonFX;
 import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOTalonFX;
+import frc.robot.subsystems.scorer.ScorerIOSparkMAX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -118,7 +118,7 @@ public class RobotContainer {
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
         // FlywheelIOTalonFX());
-        m_scorer = new Scorer(new ScorerIOTalonFX());
+        m_scorer = new Scorer(new ScorerIOSparkMAX());
         m_pivot = new Pivot(new PivotIOTalonFX() {});
         m_vision =
             switch (Constants.getVisionType()) {
@@ -145,7 +145,7 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_scorer = new Scorer(new ScorerIOSparkMAX() {});
         m_pivot = new Pivot(new PivotIOTalonFX() {});
         // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
@@ -165,7 +165,7 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        m_scorer = new Scorer(new ScorerIOTalonFX() {});
+        m_scorer = new Scorer(new ScorerIOSparkMAX() {});
         m_pivot = new Pivot(new PivotIOTalonFX() {});
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIO() {});
