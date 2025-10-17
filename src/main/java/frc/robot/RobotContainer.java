@@ -190,20 +190,22 @@ public class RobotContainer {
     // ``m_drivebase``, as that is automatically monitored.
 
     NamedCommands.registerCommand(
-        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(0.5, 8)) .withTimeout(0.6));
+        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(0.5, 8)).withTimeout(0.6));
 
     NamedCommands.registerCommand(
-        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(0.5, 4)) .withTimeout(0.8));
+        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(0.5, 4)).withTimeout(0.8));
 
     NamedCommands.registerCommand(
-        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)) .withTimeout(0.5));
+        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)).withTimeout(0.5));
 
     NamedCommands.registerCommand(
         "PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(.4, 7)));
 
-    NamedCommands.registerCommand("ShootSlow", Commands.run(() -> m_scorer.setVelocity(0.3)) .withTimeout(0.14));
+    NamedCommands.registerCommand(
+        "ShootSlow", Commands.run(() -> m_scorer.setVelocity(0.3)).withTimeout(0.14));
 
-    NamedCommands.registerCommand("Intake", Commands.run(() -> m_scorer.setVelocity(-0.5)) .withTimeout(0.5));
+    NamedCommands.registerCommand(
+        "Intake", Commands.run(() -> m_scorer.setVelocity(-0.5)).withTimeout(0.5));
 
     m_power = new PowerMonitoring(batteryCapacity, m_scorer);
 
