@@ -291,10 +291,6 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    m_pivot.setDefaultCommand(Commands.run(() -> m_pivot.goUntilPosition(.2, 10)));
-
-    m_scorer.setDefaultCommand(Commands.run(() -> m_scorer.setVelocity(-0.05)));
-
     // Coral Scorer Commands//
     // Slow Score
     driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
@@ -342,6 +338,10 @@ public class RobotContainer {
                             new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),
                     m_drivebase)
                 .ignoringDisable(true));
+
+    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(.5)));
+
+    driverController.y().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
 
     // Press RIGHT BUMPER --> Run the example flywheel (Disabled)
     // driverController

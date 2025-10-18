@@ -11,23 +11,36 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-package frc.robot.subsystems.scorer;
+package frc.robot.commands;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.scorer.Scorer;
 
-public class ScorerIOSparkMAX implements ScorerIO {
-  private final SparkMax scorer = new SparkMax(13, MotorType.kBrushless);
+public class ScorerCommands extends Command {
 
-  public ScorerIOSparkMAX() {}
+  
+  private final Scorer scorer;
+  private final double velocity;
 
-  @Override
-  public void setVelocity(double velocity) {
-    scorer.set(velocity);
+  public ScorerCommands(Scorer scorer, double velocity, double position) {
+    this.scorer = scorer;
+    this.velocity = velocity;
+    addRequirements(scorer);
   }
 
   @Override
-  public void stop() {
-    scorer.set(0);
+  public void initialize() {
+    
+  };
+
+  @Override
+  public void execute() {
+
+    scorer.setVelocity(velocity);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    scorer.stop();
   }
 }
