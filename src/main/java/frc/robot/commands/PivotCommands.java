@@ -18,7 +18,6 @@ import frc.robot.subsystems.scorer.Pivot;
 
 public class PivotCommands extends Command {
 
-  
   private final Pivot pivot;
   private final double velocity;
   private final double position;
@@ -32,8 +31,9 @@ public class PivotCommands extends Command {
 
   @Override
   public void initialize() {
-    pivot.configPID(1,1,1);
-  };
+    pivot.configPID(1, 1, 1);
+  }
+  ;
 
   @Override
   public void execute() {

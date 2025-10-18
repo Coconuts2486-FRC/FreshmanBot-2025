@@ -11,7 +11,6 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 
-
 // what?
 
 package frc.robot.subsystems.scorer;
@@ -28,7 +27,8 @@ public class Pivot extends RBSISubsystem {
 
   public void configPID(double kP, double kI, double kD) {
     io.configPID(kP, kI, kD);
-  };
+  }
+  ;
 
   public void setVelocity(double velocityInput) {
     io.setVelocity(velocityInput);
@@ -39,8 +39,7 @@ public class Pivot extends RBSISubsystem {
   }
 
   public double groundPivotPose() {
-      return 0.0;
-
+    return 0.0;
   }
 
   ///////////////////////////////////////////

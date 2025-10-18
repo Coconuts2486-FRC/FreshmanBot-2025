@@ -18,7 +18,6 @@ import frc.robot.subsystems.scorer.Scorer;
 
 public class ScorerCommands extends Command {
 
-  
   private final Scorer scorer;
   private final double velocity;
 
@@ -29,9 +28,8 @@ public class ScorerCommands extends Command {
   }
 
   @Override
-  public void initialize() {
-    
-  };
+  public void initialize() {}
+  ;
 
   @Override
   public void execute() {
