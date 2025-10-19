@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ScorerCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
@@ -292,39 +291,35 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    // Coral Scorer Commands//
-    // Slow Score
+    /*Intake Command- Pivot to Score */
+    driverController.rightTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(1)));
+    driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
+  
+    /* MAKE A DEFAULT COMMAND- THIS WILL NOT FUNCTION WITHOUT ONE*/
+
+
+    /*Intake Command- Pivot to Lollipop*/
     driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
-    driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
+    driverController.a().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
 
-    // Intake from Ground
+    /*Intake Command- Pivot to Ground*/
     driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
+    driverController.leftTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(-1)));
+    
+    /*Intake Command- Default Position scuffed version
+     * 
+     * COMMENTED OUT BECAUSE IT BREAKS EVERYTHING ELSE
+    */
+    // driverController.leftTrigger().onFalse(Commands.run(() -> m_scorer.stop()));
+    // driverController.leftTrigger().onFalse(Commands.run(() -> m_pivot.goUntilPosition(.5, 9)));
 
-    driverController.leftTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.4)));
 
-    // Intake algae from Ground
-    driverController.leftBumper().whileTrue(Commands.run(() -> m_scorer.setVelocity(-0.7)));
-
-    driverController.leftBumper().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
-
-    // ** Example Commands -- Remap, remove, or change as desired **
-    // Press B button while driving --> ROBOT-CENTRIC
-    // driverController
-    //     .b()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () ->
-    //                 DriveCommands.robotRelativeDrive(
-    //                     m_drivebase,
-    //                     () -> -driveStickY.value(),
-    //                     () -> -driveStickX.value(),
-    //                     () -> turnStickX.value()),
-    //             m_drivebase));
-
-    // // Press A button -> BRAKE
-    // driverController
-    //     .a()
-    //     .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
+    /* TESTING COMMANDS- REMOVE THESE */
+    driverController.y().whileTrue(Commands.run(() -> m_scorer.setVelocity(1)));
+    driverController.y().onFalse(Commands.run(() -> m_scorer.stop()));
+    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(1)));
+    driverController.b().onFalse(Commands.run(() -> m_pivot.setVelocity(0)));
+    /* End of testing commands */
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
@@ -340,23 +335,6 @@ public class RobotContainer {
                     m_drivebase)
                 .ignoringDisable(true));
 
-    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(.1)));
-
-    driverController.y()
-      .whileTrue
-      (Commands.run(() -> m_scorer.setVelocity(.5))
-  
-      
-      );
-
-    // Press RIGHT BUMPER --> Run the example flywheel (Disabled)
-    // driverController
-    // .rightBumper()
-    // .whileTrue(
-    //     Commands.startEnd(
-    //         () -> m_flywheel.runVelocity(flywheelSpeedInput.get()),
-    //         m_flywheel::stop,
-    //         m_flywheel));
   }
 
   /**
