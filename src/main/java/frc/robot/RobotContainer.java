@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ScorerCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
@@ -339,9 +340,14 @@ public class RobotContainer {
                     m_drivebase)
                 .ignoringDisable(true));
 
-    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(.5)));
+    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(.1)));
 
-    driverController.y().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
+    driverController.y()
+      .whileTrue
+      (Commands.run(() -> m_scorer.setVelocity(.5))
+  
+      
+      );
 
     // Press RIGHT BUMPER --> Run the example flywheel (Disabled)
     // driverController
