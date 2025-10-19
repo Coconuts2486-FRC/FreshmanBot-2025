@@ -21,19 +21,32 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 public class PivotIOSparkMAX implements PivotIO {
   // Define Motor/Encoder and set ids/channels
   private final SparkMax Pivot = new SparkMax(20, MotorType.kBrushless);
+  private final SparkMax Scorer = new SparkMax(13, MotorType.kBrushless);
   private SparkMaxConfig config = new SparkMaxConfig();
 
   private final RelativeEncoder groundPivotEncoder = Pivot.getAlternateEncoder();
 
   // Motor Commands
   @Override
-  public void setVelocity(double velocity) {
+  public void setPivotVelocity(double velocity) {
     Pivot.set(velocity);
   }
 
   @Override
-  public void stop() {
+  public void setScorerVelocity(double velocity) {
+
+    Scorer.set(velocity);
+  }
+
+  @Override
+  public void stopPivot() {
     Pivot.set(0);
+  }
+
+  @Override
+  public void stopScorer() {
+
+    Scorer.set(0);
   }
 
   // Encoder Commands

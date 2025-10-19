@@ -41,6 +41,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ScorerCommands;
+import frc.robot.commands.PivotCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
@@ -174,16 +176,6 @@ public class RobotContainer {
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
     }
-    // look here
-
-    /**********************
-     * This command already exists dont make another one
-     */
-    // NamedCommands.registerCommand(
-    // "ScoreL1",
-    // Commands.parallel(
-    // Commands.run(() -> m_scorer.setVelocity(.5));
-    // Commands.run(() -> m_pivot.goUntilPosition(0.5,8))));
 
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
@@ -321,6 +313,9 @@ public class RobotContainer {
     driverController.b().onFalse(Commands.run(() -> m_pivot.setVelocity(0)));
     /* End of testing commands */
 
+    final ScorerCommands scorerCommands;
+    scorerCommands = new ScorerCommands(m_scorer, .5, 7);
+
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
 
@@ -334,6 +329,9 @@ public class RobotContainer {
                             new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),
                     m_drivebase)
                 .ignoringDisable(true));
+
+
+m_pivot.setDefaultCommand(scorerCommands);
 
   }
 
@@ -361,14 +359,14 @@ public class RobotContainer {
   }
 
   /** Set the motor neutral mode to BRAKE / COAST for T/F */
-  public void setMotorBrake(boolean brake) {
+  public void setMotorBrake(final boolean brake) {
     m_drivebase.setMotorBrake(brake);
   }
 
   /** Updates the alerts. */
   public void updateAlerts() {
     // AprilTag layout alert
-    boolean aprilTagAlertActive = Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
+    final boolean aprilTagAlertActive = Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
     aprilTagLayoutAlert.set(aprilTagAlertActive);
     if (aprilTagAlertActive) {
       aprilTagLayoutAlert.setText(
@@ -427,11 +425,11 @@ public class RobotContainer {
    * <p>NOTE: This would normally be in a separate file.
    */
   private AutoRoutine twoPieceAuto() {
-    AutoRoutine routine = autoFactoryChoreo.newRoutine("twoPieceAuto");
+    final AutoRoutine routine = autoFactoryChoreo.newRoutine("twoPieceAuto");
 
     // Load the routine's trajectories
-    AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
-    AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
+    final AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
+    final AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
 
     // When the routine begins, reset odometry and start the first trajectory
     routine.active().onTrue(Commands.sequence(pickupTraj.resetOdometry(), pickupTraj.cmd()));

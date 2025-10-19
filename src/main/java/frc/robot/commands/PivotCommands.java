@@ -23,28 +23,26 @@ public class PivotCommands extends Command {
   private final double position;
 
   public PivotCommands(Pivot pivot, double velocity, double position) {
-    this.pivot = pivot;
     this.velocity = velocity;
+    this.pivot = pivot;
     this.position = position;
     addRequirements(pivot);
   }
 
   @Override
-  public void initialize() {
-    pivot.configPID(1, 1, 1);
-  }
-  ;
+  public void initialize() {}
+    pivot.configPID(1,1,1);
+
 
   @Override
   public void execute() {
 
-    pivot.goUntilPosition(velocity, position);
-
-    System.out.println(pivot.groundPivotPose());
+    pivot.setPivotVelocity(velocity);
   }
 
   @Override
   public void end(boolean interrupted) {
-    pivot.stop();
+    pivot.stopPivot();
+    pivot.stopScorer();
   }
 }

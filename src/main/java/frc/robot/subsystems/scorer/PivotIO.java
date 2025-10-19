@@ -16,7 +16,13 @@ package frc.robot.subsystems.scorer;
 import frc.robot.util.RBSIIO;
 
 public interface PivotIO extends RBSIIO {
-  public default void setVelocity(double velocityInput) {}
+  public default void setPivotVelocity(double velocityInput) {}
+
+  public default void setScorerVelocity(double velocityInput) {}
+
+  public default void stopPivot(){}
+
+  public default void stopScorer(){}
 
   public default void configPID(double kP, double kI, double kD) {}
 

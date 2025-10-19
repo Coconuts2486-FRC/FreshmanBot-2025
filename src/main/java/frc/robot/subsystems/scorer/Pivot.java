@@ -30,13 +30,23 @@ public class Pivot extends RBSISubsystem {
   }
   ;
 
-  public void setVelocity(double velocityInput) {
-    io.setVelocity(velocityInput);
+  public void setPivotVelocity(double velocityInput) {
+    io.setPivotVelocity(velocityInput);
   }
 
-  public void stop() {
-    io.setVelocity(0);
+  public void stopPivot() {
+    io.setPivotVelocity(0);
   }
+
+  public void setScorerVelocity(double velocityInput) {
+    io.setScorerVelocity(velocityInput);
+  }
+
+  public void stopScorer() {
+    io.setScorerVelocity(0);
+  }
+
+
 
   public double groundPivotPose() {
     return 0.0;
@@ -46,9 +56,10 @@ public class Pivot extends RBSISubsystem {
   /// Encoder Stuff
   public void goUntilPosition(double velocity, double position) {
     if (io.groundPivotPose() > position) {
-      io.setVelocity(0);
+      io.setPivotVelocity(0);
     } else {
-      io.setVelocity(velocity);
+      io.setPivotVelocity(velocity);
     }
   }
+  
 }
