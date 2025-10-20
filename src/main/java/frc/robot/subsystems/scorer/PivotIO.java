@@ -20,9 +20,9 @@ public interface PivotIO extends RBSIIO {
 
   public default void setScorerVelocity(double velocityInput) {}
 
-  public default void stopPivot(){}
+  public default void stopPivot() {}
 
-  public default void stopScorer(){}
+  public default void stopScorer() {}
 
   public default void configPID(double kP, double kI, double kD) {}
 

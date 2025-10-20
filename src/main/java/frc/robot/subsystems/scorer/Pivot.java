@@ -46,8 +46,6 @@ public class Pivot extends RBSISubsystem {
     io.setScorerVelocity(0);
   }
 
-
-
   public double groundPivotPose() {
     return 0.0;
   }
@@ -61,5 +59,4 @@ public class Pivot extends RBSISubsystem {
       io.setPivotVelocity(velocity);
     }
   }
-  
 }

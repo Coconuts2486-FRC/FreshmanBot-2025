@@ -41,14 +41,11 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ScorerCommands;
 import frc.robot.commands.PivotCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
 import frc.robot.subsystems.scorer.PivotIOSparkMAX;
-import frc.robot.subsystems.scorer.Scorer;
-import frc.robot.subsystems.scorer.ScorerIOSparkMAX;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -82,7 +79,6 @@ public class RobotContainer {
   // These are the "Active Subsystems" that the robot controlls
   private final Drive m_drivebase;
 
-  private final Scorer m_scorer;
   private final Pivot m_pivot;
   // private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
@@ -120,7 +116,6 @@ public class RobotContainer {
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
         // FlywheelIOTalonFX());
-        m_scorer = new Scorer(new ScorerIOSparkMAX());
         m_pivot = new Pivot(new PivotIOSparkMAX() {});
         m_vision =
             switch (Constants.getVisionType()) {
@@ -147,7 +142,6 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_scorer = new Scorer(new ScorerIOSparkMAX() {});
         m_pivot = new Pivot(new PivotIOSparkMAX() {});
         // m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
@@ -167,7 +161,6 @@ public class RobotContainer {
 
       default:
         // Replayed robot, disable IO implementations
-        m_scorer = new Scorer(new ScorerIOSparkMAX() {});
         m_pivot = new Pivot(new PivotIOSparkMAX() {});
         m_drivebase = new Drive();
         // m_flywheel = new Flywheel(new FlywheelIO() {});
@@ -194,12 +187,12 @@ public class RobotContainer {
         "PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(.4, 7)));
 
     NamedCommands.registerCommand(
-        "ShootSlow", Commands.run(() -> m_scorer.setVelocity(0.3)).withTimeout(0.14));
+        "ShootSlow", Commands.run(() -> m_pivot.setScorerVelocity(0.3)).withTimeout(0.14));
 
     NamedCommands.registerCommand(
-        "Intake", Commands.run(() -> m_scorer.setVelocity(-0.5)).withTimeout(0.5));
+        "Intake", Commands.run(() -> m_pivot.setScorerVelocity(-0.5)).withTimeout(0.5));
 
-    m_power = new PowerMonitoring(batteryCapacity, m_scorer);
+    m_power = new PowerMonitoring(batteryCapacity, m_pivot);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
     switch (Constants.getAutoType()) {
@@ -283,38 +276,42 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
+
+    
+
+    m_pivot.setDefaultCommand(
+      PivotCommands.goUntilPosition(m_pivot, .5, 8));
+
     /*Intake Command- Pivot to Score */
-    driverController.rightTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(1)));
+    driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
     driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
-  
+
     /* MAKE A DEFAULT COMMAND- THIS WILL NOT FUNCTION WITHOUT ONE*/
 
-
     /*Intake Command- Pivot to Lollipop*/
-    driverController.a().whileTrue(Commands.run(() -> m_scorer.setVelocity(.5)));
+    driverController.a().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(.5)));
     driverController.a().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
 
     /*Intake Command- Pivot to Ground*/
     driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
-    driverController.leftTrigger().whileTrue(Commands.run(() -> m_scorer.setVelocity(-1)));
-    
+    driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
+
     /*Intake Command- Default Position scuffed version
-     * 
+     *
      * COMMENTED OUT BECAUSE IT BREAKS EVERYTHING ELSE
-    */
+     */
     // driverController.leftTrigger().onFalse(Commands.run(() -> m_scorer.stop()));
     // driverController.leftTrigger().onFalse(Commands.run(() -> m_pivot.goUntilPosition(.5, 9)));
 
-
     /* TESTING COMMANDS- REMOVE THESE */
-    driverController.y().whileTrue(Commands.run(() -> m_scorer.setVelocity(1)));
-    driverController.y().onFalse(Commands.run(() -> m_scorer.stop()));
-    driverController.b().whileTrue(Commands.run(() -> m_pivot.setVelocity(1)));
-    driverController.b().onFalse(Commands.run(() -> m_pivot.setVelocity(0)));
+    driverController.y().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
+    driverController.y().onFalse(Commands.run(() -> m_pivot.stopScorer()));
+    driverController.b().whileTrue(Commands.run(() -> m_pivot.setPivotVelocity(1)));
+    driverController.b().onFalse(Commands.run(() -> m_pivot.stopPivot()));
     /* End of testing commands */
 
-    final ScorerCommands scorerCommands;
-    scorerCommands = new ScorerCommands(m_scorer, .5, 7);
+    final PivotCommands pivotCommands;
+    pivotCommands = new PivotCommands(m_pivot, .5, 7);
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
@@ -329,10 +326,6 @@ public class RobotContainer {
                             new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),
                     m_drivebase)
                 .ignoringDisable(true));
-
-
-m_pivot.setDefaultCommand(scorerCommands);
-
   }
 
   /**
@@ -366,7 +359,8 @@ m_pivot.setDefaultCommand(scorerCommands);
   /** Updates the alerts. */
   public void updateAlerts() {
     // AprilTag layout alert
-    final boolean aprilTagAlertActive = Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
+    final boolean aprilTagAlertActive =
+        Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
     aprilTagLayoutAlert.set(aprilTagAlertActive);
     if (aprilTagAlertActive) {
       aprilTagLayoutAlert.setText(
