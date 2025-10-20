@@ -280,7 +280,7 @@ public class RobotContainer {
     
 
     m_pivot.setDefaultCommand(
-      PivotCommands.goUntilPosition(m_pivot, .5, 8));
+      PivotCommands.goToDefault(m_pivot));
 
     /*Intake Command- Pivot to Score */
     driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));

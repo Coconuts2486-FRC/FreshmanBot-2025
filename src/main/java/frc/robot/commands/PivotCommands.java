@@ -13,7 +13,6 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -33,10 +32,9 @@ public class PivotCommands extends Command {
     addRequirements(pivot);
   }
 
-  public static Command goUntilPosition(
-    Pivot pivot,Double velocity,int position
-  ) { return Commands.run(() -> pivot.goUntilPosition(velocity, position));}
+  public static Command goUntilPosition(Pivot pivot,Double velocity,int position) { return Commands.run(() -> pivot.goUntilPosition(velocity, position));}
 
+  public static Command goToDefault(Pivot pivot) {return Commands.run(() -> pivot.goToDefault());}
   @Override
   public void initialize() {
 
@@ -47,7 +45,7 @@ public class PivotCommands extends Command {
     pivot.stopPivot();
     pivot.stopScorer();
   }
-    ;
+    
 
 
   @Override
