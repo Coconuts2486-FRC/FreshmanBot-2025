@@ -35,28 +35,17 @@ public class PivotCommands extends Command {
   }
 
   public static Command goToDefault(Pivot pivot) {
-    return Commands.run(() -> pivot.goToDefault());
+    return Commands.run(() -> pivot.goToDefault(),pivot);
   }
 
   @Override
   public void initialize() {
 
-    pivot.configPID(position, velocity, position);
-    pivot.setPivotVelocity(velocity);
-    pivot.goUntilPosition(velocity, position);
-    pivot.setScorerVelocity(velocity);
-    pivot.stopPivot();
-    pivot.stopScorer();
   }
 
   @Override
   public void execute() {
 
-    pivot.setPivotVelocity(velocity);
-    pivot.goUntilPosition(velocity, position);
-    pivot.setScorerVelocity(velocity);
-    pivot.stopPivot();
-    pivot.stopScorer();
   }
 
   @Override

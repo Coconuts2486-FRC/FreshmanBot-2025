@@ -292,6 +292,8 @@ public class RobotContainer {
     driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
     driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
 
+    driverController.leftBumper().whileTrue(Commands.run(() -> m_pivot.sendInformationPlease()).ignoringDisable(true));
+
     /*Intake Command- Default Position scuffed version
      *
      * COMMENTED OUT BECAUSE IT BREAKS EVERYTHING ELSE
@@ -318,10 +320,7 @@ public class RobotContainer {
         .onTrue(
             Commands.runOnce(
                     () ->
-                        m_drivebase.resetPose(
-                            new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),
-                    m_drivebase)
-                .ignoringDisable(true));
+                        m_drivebase.resetPose(new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),m_drivebase).ignoringDisable(true));
   }
 
   /**
