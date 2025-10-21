@@ -57,10 +57,11 @@ public class Pivot extends RBSISubsystem {
     return 0.0;
   }
 
-  public void sendInformationPlease(){
+  public void sendInformationPlease() {
     double pose = io.groundPivotPose();
     System.out.println("Pose:" + pose);
   }
+
   ///////////////////////////////////////////
   /// Encoder Stuff
   public void goUntilPosition(double velocity, double position) {

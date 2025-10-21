@@ -35,18 +35,14 @@ public class PivotCommands extends Command {
   }
 
   public static Command goToDefault(Pivot pivot) {
-    return Commands.run(() -> pivot.goToDefault(),pivot);
+    return Commands.run(() -> pivot.goToDefault(), pivot);
   }
 
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   @Override
-  public void execute() {
-
-  }
+  public void execute() {}
 
   @Override
   public void end(boolean interrupted) {
