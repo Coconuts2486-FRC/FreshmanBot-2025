@@ -28,7 +28,6 @@ public class Pivot extends RBSISubsystem {
   public void configPID(double kP, double kI, double kD) {
     io.configPID(kP, kI, kD);
   }
-  
 
   public void goToDefault() {
     io.setScorerVelocity(0);

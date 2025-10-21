@@ -276,14 +276,10 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-
-    
-
-    m_pivot.setDefaultCommand(
-      PivotCommands.goToDefault(m_pivot));
+    m_pivot.setDefaultCommand(PivotCommands.goToDefault(m_pivot));
 
     /*Intake Command- Pivot to Score */
-    driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
+    driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
     driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
 
     /* MAKE A DEFAULT COMMAND- THIS WILL NOT FUNCTION WITHOUT ONE*/
