@@ -276,7 +276,7 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    m_pivot.setDefaultCommand(PivotCommands.goToDefault(m_pivot));
+    // m_pivot.setDefaultCommand(PivotCommands.goToDefault(m_pivot));
 
     /*Intake Command- Pivot to Score */
     driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
@@ -304,7 +304,7 @@ public class RobotContainer {
     // driverController.leftTrigger().onFalse(Commands.run(() -> m_pivot.goUntilPosition(.5, 9)));
 
     /* TESTING COMMANDS- REMOVE THESE */
-    driverController.y().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
+    driverController.y().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(.05)));
     driverController.y().onFalse(Commands.run(() -> m_pivot.stopScorer()));
     driverController.b().whileTrue(Commands.run(() -> m_pivot.setPivotVelocity(1)));
     driverController.b().onFalse(Commands.run(() -> m_pivot.stopPivot()));

@@ -13,10 +13,11 @@
 
 package frc.robot.subsystems.scorer;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class PivotIOSparkMAX implements PivotIO {
   // Define Motor/Encoder and set ids/channels
@@ -24,7 +25,9 @@ public class PivotIOSparkMAX implements PivotIO {
   private final SparkMax Scorer = new SparkMax(13, MotorType.kBrushless);
   private SparkMaxConfig config = new SparkMaxConfig();
 
-  private final RelativeEncoder groundPivotEncoder = Pivot.getAlternateEncoder();
+  // private final RelativeEncoder groundPivotEncoder = Pivot.getAlternateEncoder();
+  private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(0);
+  private final PIDController pid = new PIDController(0, 0, 0);
 
   // Motor Commands
   @Override
@@ -36,6 +39,11 @@ public class PivotIOSparkMAX implements PivotIO {
   public void setScorerVelocity(double velocity) {
 
     Scorer.set(velocity);
+  }
+
+  @Override
+  public void goUntilPosition(double position) {
+    Pivot.set(-pid.calculate(pivotEncoder.get(), position));
   }
 
   @Override
@@ -52,7 +60,7 @@ public class PivotIOSparkMAX implements PivotIO {
   // Encoder Commands
   @Override
   public double groundPivotPose() {
-    return groundPivotEncoder.getPosition();
+    return pivotEncoder.get();
   }
 
   // PID (pain, incineration, and destruction)

@@ -29,4 +29,6 @@ public interface PivotIO extends RBSIIO {
   public default double groundPivotPose() {
     return 0.0;
   }
+
+  public default void goUntilPosition(double position) {}
 }

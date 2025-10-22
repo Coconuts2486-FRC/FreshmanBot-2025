@@ -30,6 +30,7 @@ public class Pivot extends RBSISubsystem {
   }
 
   public void goToDefault() {
+    io.setScorerVelocity(0);
     if (io.groundPivotPose() > 7) {
       io.setPivotVelocity(0);
     } else {
@@ -64,11 +65,5 @@ public class Pivot extends RBSISubsystem {
 
   ///////////////////////////////////////////
   /// Encoder Stuff
-  public void goUntilPosition(double velocity, double position) {
-    if (io.groundPivotPose() > position) {
-      io.setPivotVelocity(0);
-    } else {
-      io.setPivotVelocity(velocity);
-    }
-  }
+  public void goUntilPosition(double velocity, double position) {}
 }
