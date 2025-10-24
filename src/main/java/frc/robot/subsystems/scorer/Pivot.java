@@ -16,9 +16,11 @@
 package frc.robot.subsystems.scorer;
 
 import frc.robot.util.RBSISubsystem;
+import java.util.function.BooleanSupplier;
 
 public class Pivot extends RBSISubsystem {
   private final PivotIO io;
+  private BooleanSupplier disableSupplier;
 
   public Pivot(PivotIO io) {
     this.io = io;
@@ -27,15 +29,6 @@ public class Pivot extends RBSISubsystem {
 
   public void configPID(double kP, double kI, double kD) {
     io.configPID(kP, kI, kD);
-  }
-
-  public void goToDefault() {
-    io.setScorerVelocity(0);
-    if (io.groundPivotPose() > 7) {
-      io.setPivotVelocity(0);
-    } else {
-      io.setPivotVelocity(.5);
-    }
   }
 
   public void setPivotVelocity(double velocityInput) {
@@ -65,5 +58,8 @@ public class Pivot extends RBSISubsystem {
 
   ///////////////////////////////////////////
   /// Encoder Stuff
-  public void goUntilPosition(double velocity, double position) {}
+  public void goUntilPosition(double velocity, double position) {
+    // Check for position
+    io.stop();
+  }
 }

@@ -20,22 +20,16 @@ import frc.robot.subsystems.scorer.Pivot;
 public class PivotCommands extends Command {
 
   private final Pivot pivot;
-  private final double velocity;
   private final double position;
 
-  public PivotCommands(Pivot pivot, double velocity, double position) {
-    this.velocity = velocity;
+  public PivotCommands(Pivot pivot, Double position) {
     this.pivot = pivot;
     this.position = position;
     addRequirements(pivot);
   }
 
-  public static Command goUntilPosition(Pivot pivot, Double velocity, int position) {
-    return Commands.run(() -> pivot.goUntilPosition(velocity, position));
-  }
-
-  public static Command goToDefault(Pivot pivot) {
-    return Commands.run(() -> pivot.goToDefault(), pivot);
+  public static Command goUntilPosition(Pivot pivot, Double position) {
+    return Commands.run(() -> pivot.goUntilPosition(position, position));
   }
 
   @Override
