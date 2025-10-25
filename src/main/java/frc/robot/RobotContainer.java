@@ -41,7 +41,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.PivotCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.scorer.Pivot;
@@ -175,16 +174,15 @@ public class RobotContainer {
     // ``m_drivebase``, as that is automatically monitored.
 
     NamedCommands.registerCommand(
-        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(0.5, 8)).withTimeout(0.6));
+        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(8)).withTimeout(0.6));
 
     NamedCommands.registerCommand(
-        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(0.5, 4)).withTimeout(0.8));
+        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(4)).withTimeout(0.8));
 
     NamedCommands.registerCommand(
-        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(0.5, 2)).withTimeout(0.5));
+        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(2)).withTimeout(0.5));
 
-    NamedCommands.registerCommand(
-        "PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(.4, 7)));
+    NamedCommands.registerCommand("PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(7)));
 
     NamedCommands.registerCommand(
         "ShootSlow", Commands.run(() -> m_pivot.setScorerVelocity(0.3)).withTimeout(0.14));
@@ -276,47 +274,32 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    // m_pivot.setDefaultCommand(PivotCommands.goToPosition(position, m_pivot));
-
-    /*Intake Command- Pivot to Score */
-    // driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(1)));
-    // driverController.rightTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5,
-    // 8)));
-
-    /* MAKE A DEFAULT COMMAND- THIS WILL NOT FUNCTION WITHOUT ONE*/
-
-    /*Intake Command- Pivot to Lollipop*/
-    driverController.a().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(.5)));
-    driverController.a().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 4)));
-
-    /*Intake Command- Pivot to Ground*/
-    driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.5, 8)));
-    driverController.leftTrigger().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
-
-    // driverController
-    //     .leftBumper()
-    //     .whileTrue(Commands.run(() -> m_pivot.sendInformationPlease()).ignoringDisable(true));
-
-    /*Intake Command- Default Position scuffed version
-     *
-     * COMMENTED OUT BECAUSE IT BREAKS EVERYTHING ELSE
-     */
-    // driverController.leftTrigger().onFalse(Commands.run(() -> m_scorer.stop()));
-    // driverController.leftTrigger().onFalse(Commands.run(() -> m_pivot.goUntilPosition(.5, 9)));
-
     /* TESTING COMMANDS- REMOVE THESE */
-    driverController.y().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-.3)));
-    driverController.y().onFalse(Commands.run(() -> m_pivot.stopScorer()));
-    driverController.leftBumper().whileTrue(Commands.run(() -> m_pivot.setPivotVelocity(.1)));
-    driverController.leftBumper().onFalse(Commands.run(() -> m_pivot.stopPivot()));
-    driverController.b().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(.3)));
-    driverController.b().onFalse(Commands.run(() -> m_pivot.setScorerVelocity(0)));
-    driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setPivotVelocity(-0.05)));
-    driverController.rightBumper().onFalse(Commands.run(() -> m_pivot.setPivotVelocity(0)));
-    /* End of testing commands */
+    driverController
+        .a()
+        .whileTrue(Commands.run(() -> m_pivot.sendInformationPlease()).ignoringDisable(true));
 
-    final PivotCommands pivotCommands;
-    pivotCommands = new PivotCommands(m_pivot, (double) 7);
+    driverController
+        .leftTrigger()
+        .whileTrue(
+            Commands.parallel(
+                Commands.run(() -> m_pivot.goUntilPosition(.1), m_pivot),
+                Commands.run(() -> m_pivot.setScorerVelocity(.5))));
+    driverController
+        .leftTrigger()
+        .onFalse(
+            Commands.parallel(
+                Commands.run(() -> m_pivot.goUntilPosition(.6), m_pivot),
+                Commands.run(() -> m_pivot.stopScorer())));
+
+    driverController
+        .rightTrigger()
+        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.55), m_pivot));
+    driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
+    driverController
+        .rightTrigger()
+        .onFalse(Commands.run(() -> m_pivot.goUntilPosition(.6), m_pivot));
+    driverController.rightBumper().onFalse(Commands.run(() -> m_pivot.stopScorer()));
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));

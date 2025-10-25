@@ -29,7 +29,7 @@ public class PivotCommands extends Command {
   }
 
   public static Command goUntilPosition(Pivot pivot, Double position) {
-    return Commands.run(() -> pivot.goUntilPosition(position, position));
+    return Commands.run(() -> pivot.goUntilPosition(position));
   }
 
   @Override

@@ -58,8 +58,7 @@ public class Pivot extends RBSISubsystem {
 
   ///////////////////////////////////////////
   /// Encoder Stuff
-  public void goUntilPosition(double velocity, double position) {
-    // Check for position
-    io.stop();
+  public void goUntilPosition(double position) {
+    io.goUntilPosition(position);
   }
 }

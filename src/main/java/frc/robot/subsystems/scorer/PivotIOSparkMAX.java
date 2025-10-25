@@ -27,7 +27,7 @@ public class PivotIOSparkMAX implements PivotIO {
 
   // private final RelativeEncoder groundPivotEncoder = Pivot.getAlternateEncoder();
   private final DutyCycleEncoder pivotEncoder = new DutyCycleEncoder(0);
-  private final PIDController pid = new PIDController(1, 0, 1);
+  private final PIDController pid = new PIDController(1.8, 0, 0);
 
   // Motor Commands
   @Override
@@ -43,13 +43,7 @@ public class PivotIOSparkMAX implements PivotIO {
 
   @Override
   public void goUntilPosition(double position) {
-
-    // COnstant velocity motion in the desired direction
-    if (pivotEncoder.get() > (position + 0.1)) {
-      Pivot.set(.5);
-    } else {
-      Pivot.set(-pid.calculate(pivotEncoder.get(), position));
-    }
+    Pivot.set(pid.calculate(pivotEncoder.get(), position));
   }
 
   @Override
