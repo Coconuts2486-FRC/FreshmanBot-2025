@@ -283,22 +283,22 @@ public class RobotContainer {
         .leftTrigger()
         .whileTrue(
             Commands.parallel(
-                Commands.run(() -> m_pivot.goUntilPosition(.1), m_pivot),
+                Commands.run(() -> m_pivot.goUntilPosition(.15), m_pivot),
                 Commands.run(() -> m_pivot.setScorerVelocity(.5))));
     driverController
         .leftTrigger()
         .onFalse(
             Commands.parallel(
-                Commands.run(() -> m_pivot.goUntilPosition(.6), m_pivot),
+                Commands.run(() -> m_pivot.goUntilPosition(.68), m_pivot),
                 Commands.run(() -> m_pivot.stopScorer())));
 
     driverController
         .rightTrigger()
-        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.55), m_pivot));
+        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.57), m_pivot));
     driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
     driverController
         .rightTrigger()
-        .onFalse(Commands.run(() -> m_pivot.goUntilPosition(.6), m_pivot));
+        .onFalse(Commands.run(() -> m_pivot.goUntilPosition(.68), m_pivot));
     driverController.rightBumper().onFalse(Commands.run(() -> m_pivot.stopScorer()));
 
     // Press X button --> Stop with wheels in X-Lock position
