@@ -26,7 +26,6 @@ import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -36,17 +35,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.AprilTagConstants.AprilTagLayoutType;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.accelerometer.Accelerometer;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.scorer.Pivot;
-import frc.robot.subsystems.scorer.PivotIOSparkMAX;
+import frc.robot.subsystems.flywheel_example.Flywheel;
+import frc.robot.subsystems.flywheel_example.FlywheelIO;
+import frc.robot.subsystems.flywheel_example.FlywheelIOSim;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Alert;
@@ -68,18 +68,11 @@ public class RobotContainer {
   final CommandXboxController operatorController = new CommandXboxController(1); // Second Operator
   final OverrideSwitches overrides = new OverrideSwitches(2); // Console toggle switches
 
-  // Define Triggers
-  // private final Trigger elevatorDisable = overrides.Switch(OperatorConstants.ELEVATOR_OVERRIDE);
-  private final Trigger scorerPivotDisable = overrides.Switch(OperatorConstants.SCORER_OVERRIDE);
-  // private final Trigger algaePivotDisable = overrides.Switch(OperatorConstants.ALGAE_OVERRIDE);
-  private final Trigger visionOdometryDisable = overrides.Switch(OperatorConstants.VISION_OVERRIDE);
-
   /** Declare the robot subsystems here ************************************ */
   // These are the "Active Subsystems" that the robot controlls
   private final Drive m_drivebase;
 
-  private final Pivot m_pivot;
-  // private final Flywheel m_flywheel;
+  private final Flywheel m_flywheel;
   // These are "Virtual Subsystems" that report information but have no motors
   private final Accelerometer m_accel;
   private final Vision m_vision;
@@ -113,23 +106,19 @@ public class RobotContainer {
         // Real robot, instantiate hardware IO implementations
         // YAGSL drivebase, get config from deploy directory
         m_drivebase = new Drive();
-        // m_flywheel = new Flywheel(new FlywheelIOSpark()); // new Flywheel(new
-        // FlywheelIOTalonFX());
-        m_pivot = new Pivot(new PivotIOSparkMAX() {});
+        m_flywheel = new Flywheel(new FlywheelIOSim()); // new Flywheel(new FlywheelIOTalonFX());
         m_vision =
             switch (Constants.getVisionType()) {
               case PHOTON ->
                   new Vision(
                       m_drivebase::addVisionMeasurement,
-                      //   new VisionIOPhotonVision(cameraElevatorL, robotToCameraEL),
-                      //   new VisionIOPhotonVision(cameraElevatorR, robotToCameraER),
-                      new VisionIOPhotonVision(cameraCL, robotToCameraECL, BW7Stretch),
-                      new VisionIOPhotonVision(cameraCR, robotToCameraECR, BW9Stretch)
-                      //   new VisionIOPhotonVision(cameraIntake, robotToCameraIntake, BW4Stretch)
-                      );
+                      new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                      new VisionIOPhotonVision(camera1Name, robotToCamera1));
               case LIMELIGHT ->
                   new Vision(
-                      m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+                      m_drivebase::addVisionMeasurement,
+                      new VisionIOLimelight(camera0Name, m_drivebase::getRotation),
+                      new VisionIOLimelight(camera1Name, m_drivebase::getRotation));
               case NONE ->
                   new Vision(
                       m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
@@ -141,28 +130,19 @@ public class RobotContainer {
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
         m_drivebase = new Drive();
-        m_pivot = new Pivot(new PivotIOSparkMAX() {});
-        // m_flywheel = new Flywheel(new FlywheelIOSim() {});
+        m_flywheel = new Flywheel(new FlywheelIOSim() {});
         m_vision =
             new Vision(
                 m_drivebase::addVisionMeasurement,
-                // new VisionIOPhotonVisionSim(cameraElevatorL, robotToCameraEL,
-                // m_drivebase::getPose),
-                // new VisionIOPhotonVisionSim(cameraElevatorR, robotToCameraER,
-                // m_drivebase::getPose),
-                new VisionIOPhotonVisionSim(cameraCR, robotToCameraECR, m_drivebase::getPose),
-                new VisionIOPhotonVisionSim(cameraCL, robotToCameraECL, m_drivebase::getPose)
-                // new VisionIOPhotonVisionSim(
-                //     cameraIntake, robotToCameraIntake, m_drivebase::getPose)
-                );
+                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, m_drivebase::getPose),
+                new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, m_drivebase::getPose));
         m_accel = new Accelerometer(m_drivebase.getGyro());
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        m_pivot = new Pivot(new PivotIOSparkMAX() {});
         m_drivebase = new Drive();
-        // m_flywheel = new Flywheel(new FlywheelIO() {});
+        m_flywheel = new Flywheel(new FlywheelIO() {});
         m_vision =
             new Vision(m_drivebase::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         m_accel = new Accelerometer(m_drivebase.getGyro());
@@ -172,32 +152,14 @@ public class RobotContainer {
     // In addition to the initial battery capacity from the Dashbaord, ``PowerMonitoring`` takes all
     // the non-drivebase subsystems for which you wish to have power monitoring; DO NOT include
     // ``m_drivebase``, as that is automatically monitored.
-
-    NamedCommands.registerCommand(
-        "PivotToScore", Commands.run(() -> m_pivot.goUntilPosition(.55)).withTimeout(0.6));
-
-    NamedCommands.registerCommand(
-        "PivotToLollipop", Commands.run(() -> m_pivot.goUntilPosition(.1)).withTimeout(0.8));
-
-    NamedCommands.registerCommand(
-        "PivotToGround", Commands.run(() -> m_pivot.goUntilPosition(.1)).withTimeout(0.5));
-
-    NamedCommands.registerCommand("PivotToIdle", Commands.run(() -> m_pivot.goUntilPosition(.6)));
-
-    NamedCommands.registerCommand(
-        "ShootSlow", Commands.run(() -> m_pivot.setScorerVelocity(.5)).withTimeout(0.14));
-
-    NamedCommands.registerCommand(
-        "Intake", Commands.run(() -> m_pivot.setScorerVelocity(-0.5)).withTimeout(-1));
-
-    m_power = new PowerMonitoring(batteryCapacity, m_pivot);
+    m_power = new PowerMonitoring(batteryCapacity, m_flywheel);
 
     // Set up the SmartDashboard Auto Chooser based on auto type
     switch (Constants.getAutoType()) {
       case PATHPLANNER:
         autoChooserPathPlanner =
             new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
-        // Set the others to nullfrc.robot.subsystems.scorer.ScorerIOSpark
+        // Set the others to null
         autoChooserChoreo = null;
         autoFactoryChoreo = null;
         break;
@@ -223,12 +185,6 @@ public class RobotContainer {
         throw new RuntimeException(
             "Incorrect AUTO type selected in Constants: " + Constants.getAutoType());
     }
-
-    // Set up subsystem overrides
-    // m_elevator.setOverrides(elevatorDisable);
-    // m_intake.setOverrides(intakePivotDisable);
-    // m_algaeMech.setOverrides(algaePivotDisable);
-    m_vision.setOverrides(visionOdometryDisable);
 
     // Define Auto commands
     defineAutoCommands();
@@ -274,39 +230,31 @@ public class RobotContainer {
             () -> -driveStickX.value(),
             () -> -turnStickX.value()));
 
-    /* TESTING COMMANDS- REMOVE THESE */
+    // ** Example Commands -- Remap, remove, or change as desired **
+    // Press B button while driving --> ROBOT-CENTRIC
+    driverController
+        .b()
+        .onTrue(
+            Commands.runOnce(
+                () ->
+                    DriveCommands.robotRelativeDrive(
+                        m_drivebase,
+                        () -> -driveStickY.value(),
+                        () -> -driveStickX.value(),
+                        () -> turnStickX.value()),
+                m_drivebase));
+
+    // Press A button -> BRAKE
     driverController
         .a()
-        .whileTrue(Commands.run(() -> m_pivot.sendInformationPlease()).ignoringDisable(true));
-
-    driverController
-        .leftTrigger()
-        .whileTrue(
-            Commands.parallel(
-                Commands.run(() -> m_pivot.goUntilPosition(.15), m_pivot),
-                Commands.run(() -> m_pivot.setScorerVelocity(.5))));
-    driverController
-        .leftTrigger()
-        .onFalse(
-            Commands.parallel(
-                Commands.run(() -> m_pivot.goUntilPosition(.68), m_pivot),
-                Commands.run(() -> m_pivot.stopScorer())));
-
-    driverController
-        .rightTrigger()
-        .whileTrue(Commands.run(() -> m_pivot.goUntilPosition(.57), m_pivot));
-    driverController.rightBumper().whileTrue(Commands.run(() -> m_pivot.setScorerVelocity(-1)));
-    driverController
-        .rightTrigger()
-        .onFalse(Commands.run(() -> m_pivot.goUntilPosition(.68), m_pivot));
-    driverController.rightBumper().onFalse(Commands.run(() -> m_pivot.stopScorer()));
+        .whileTrue(Commands.runOnce(() -> m_drivebase.setMotorBrake(true), m_drivebase));
 
     // Press X button --> Stop with wheels in X-Lock position
     driverController.x().onTrue(Commands.runOnce(m_drivebase::stopWithX, m_drivebase));
 
-    // Press start (three bars) button --> Manually Re-Zero the Gyro
+    // Press Y button --> Manually Re-Zero the Gyro
     driverController
-        .start()
+        .y()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -314,6 +262,15 @@ public class RobotContainer {
                             new Pose2d(m_drivebase.getPose().getTranslation(), new Rotation2d())),
                     m_drivebase)
                 .ignoringDisable(true));
+
+    // Press RIGHT BUMPER --> Run the example flywheel
+    driverController
+        .rightBumper()
+        .whileTrue(
+            Commands.startEnd(
+                () -> m_flywheel.runVelocity(flywheelSpeedInput.get()),
+                m_flywheel::stop,
+                m_flywheel));
   }
 
   /**
@@ -340,15 +297,14 @@ public class RobotContainer {
   }
 
   /** Set the motor neutral mode to BRAKE / COAST for T/F */
-  public void setMotorBrake(final boolean brake) {
+  public void setMotorBrake(boolean brake) {
     m_drivebase.setMotorBrake(brake);
   }
 
   /** Updates the alerts. */
   public void updateAlerts() {
     // AprilTag layout alert
-    final boolean aprilTagAlertActive =
-        Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
+    boolean aprilTagAlertActive = Constants.getAprilTagLayoutType() != AprilTagLayoutType.OFFICIAL;
     aprilTagLayoutAlert.set(aprilTagAlertActive);
     if (aprilTagAlertActive) {
       aprilTagLayoutAlert.setText(
@@ -386,32 +342,32 @@ public class RobotContainer {
           m_drivebase.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
       // Example Flywheel SysId Characterization
-      // autoChooserPathPlanner.addOption(
-      //     "Flywheel SysId (Quasistatic Forward)",
-      //     m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-      // autoChooserPathPlanner.addOption(
-      //     "Flywheel SysId (Quasistatic Reverse)",
-      //     m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-      // autoChooserPathPlanner.addOption(
-      //     "Flywheel SysId (Dynamic Forward)",
-      //     m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
-      // autoChooserPathPlanner.addOption(
-      //     "Flywheel SysId (Dynamic Reverse)",
-      //     m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+      autoChooserPathPlanner.addOption(
+          "Flywheel SysId (Quasistatic Forward)",
+          m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+      autoChooserPathPlanner.addOption(
+          "Flywheel SysId (Quasistatic Reverse)",
+          m_flywheel.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+      autoChooserPathPlanner.addOption(
+          "Flywheel SysId (Dynamic Forward)",
+          m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kForward));
+      autoChooserPathPlanner.addOption(
+          "Flywheel SysId (Dynamic Reverse)",
+          m_flywheel.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
   }
 
   /**
    * Example Choreo auto command
    *
-   * <p>NOTE: This would normally be in a separate file.
+   * <p>NOTE: This would normally be in a spearate file.
    */
   private AutoRoutine twoPieceAuto() {
-    final AutoRoutine routine = autoFactoryChoreo.newRoutine("twoPieceAuto");
+    AutoRoutine routine = autoFactoryChoreo.newRoutine("twoPieceAuto");
 
     // Load the routine's trajectories
-    final AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
-    final AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
+    AutoTrajectory pickupTraj = routine.trajectory("pickupGamepiece");
+    AutoTrajectory scoreTraj = routine.trajectory("scoreGamepiece");
 
     // When the routine begins, reset odometry and start the first trajectory
     routine.active().onTrue(Commands.sequence(pickupTraj.resetOdometry(), pickupTraj.cmd()));

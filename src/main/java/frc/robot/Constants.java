@@ -72,9 +72,9 @@ public final class Constants {
   //       under strict caveat emptor -- and submit any error and bugfixes
   //       via GitHub issues.
   private static SwerveType swerveType = SwerveType.PHOENIX6; // PHOENIX6, YAGSL
-  private static CTREPro phoenixPro = CTREPro.LICENSED; // LICENSED, UNLICENSED
+  private static CTREPro phoenixPro = CTREPro.UNLICENSED; // LICENSED, UNLICENSED
   private static AutoType autoType = AutoType.PATHPLANNER; // PATHPLANNER, CHOREO
-  private static VisionType visionType = VisionType.PHOTON; // PHOTON, LIMELIGHT, NONE
+  private static VisionType visionType = VisionType.NONE; // PHOTON, LIMELIGHT, NONE
 
   /** Enumerate the robot types (name your robots here) */
   public static enum RobotType {
@@ -109,7 +109,7 @@ public final class Constants {
   /** Physical Constants for Robot Operation ******************************* */
   public static final class PhysicalConstants {
 
-    public static final double kRobotMassKg = Units.lbsToKilograms(55);
+    public static final double kRobotMassKg = Units.lbsToKilograms(100.);
     public static final Matter kChassis =
         new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), kRobotMassKg);
     // Robot moment of intertial; this can be obtained from a CAD model of your drivetrain. Usually,
@@ -135,14 +135,14 @@ public final class Constants {
     // Theoretical free speed (m/s) at 12v applied output;
     // IMPORTANT: Follow the AdvantageKit instructions for measuring the ACTUAL maximum linear speed
     // of YOUR ROBOT, and replace the estimate here with your measured value!
-    public static final double kMaxLinearSpeed = Units.feetToMeters(20);
+    public static final double kMaxLinearSpeed = Units.feetToMeters(18);
 
     // Set 3/4 of a rotation per second as the max angular velocity (radians/sec)
     public static final double kMaxAngularSpeed = 1.5 * Math.PI;
 
     // Maximum chassis accelerations desired for robot motion  -- metric / radians
     // TODO: Compute the maximum linear acceleration given the PHYSICS of the ROBOT!
-    public static final double kMaxLinearAccel = 10; // m/s/s
+    public static final double kMaxLinearAccel = 4.0; // m/s/s
     public static final double kMaxAngularAccel = Units.degreesToRadians(720);
 
     // Hold time on motor brakes when disabled
@@ -232,8 +232,8 @@ public final class Constants {
     public static final int OPERATOR_SWITCH_0 = 8;
     public static final int OPERATOR_SWITCH_1 = 9;
     public static final int OPERATOR_SWITCH_2 = 10;
-    public static final int SCORER_OVERRIDE = 11;
-    public static final int VISION_OVERRIDE = 12;
+    public static final int OPERATOR_SWITCH_3 = 11;
+    public static final int OPERATOR_SWITCH_4 = 12;
 
     public static final int[] MULTI_TOGGLE = {4, 5};
   }
@@ -296,45 +296,23 @@ public final class Constants {
   /** Vision Camera Posses ************************************************* */
   public static class Cameras {
     // Camera names, must match names configured on coprocessor
-    public static String cameraCL = "Photon_BW7"; //  Camera in the double mount in center *Left
-    public static String cameraCR = "Photon_BW5"; //  Camera in the double mount in center *Right
-
-    // Incorrect distance measurement factor
-    public static double BW7Stretch = 1.00; // 1.02;
-    public static double BW9Stretch = 1.00; // 1.01;
-
+    public static String camera0Name = "camera_0";
+    public static String camera1Name = "camera_1";
     // ... And more, if needed
 
     // Robot to camera transforms
-    // public static Transform3d robotToCameraEL =
-    //     new Transform3d(
-    //         Units.inchesToMeters(-12.3),
-    //         Units.inchesToMeters(-(9.23 - 0.375)), // Waiting for actual mounts
-    //         Units.inchesToMeters(10.1 - 1.0), // before adding these...
-    //         new Rotation3d(0.0, 0.0, Units.degreesToRadians(180.0 + 20.0))
-    //             .rotateBy(new Rotation3d(0.0, Units.degreesToRadians(25.0), 0.0)));
-
-    // For the double camera mount in the center * Right side
-    public static Transform3d robotToCameraECL =
-        new Transform3d(
-            Units.inchesToMeters(-12.818 + .8125),
-            Units.inchesToMeters(0.0 + .875),
-            Units.inchesToMeters(6.122),
-            new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
-    // For the double camera mount in the center * Left side
-    public static Transform3d robotToCameraECR =
-        new Transform3d(
-            Units.inchesToMeters(-12.818 + .8125),
-            Units.inchesToMeters(0.0 - .875),
-            Units.inchesToMeters(6.122),
-            new Rotation3d(0.0, Units.degreesToRadians(10.0), Units.degreesToRadians(180.0)));
+    // (ONLY USED FOR PHOTONVISION -- Limelight: configure in web UI instead)
+    public static Transform3d robotToCamera0 =
+        new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
+    public static Transform3d robotToCamera1 =
+        new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
 
     // Standard deviation multipliers for each camera
     // (Adjust to trust some cameras more than others)
     public static double[] cameraStdDevFactors =
         new double[] {
-          1.0, // Camera EL
-          1.0, // Camera ER
+          1.0, // Camera 0
+          1.0 // Camera 1
         };
   }
 
@@ -376,8 +354,6 @@ public final class Constants {
     // Pigeon
     public static final RobotDeviceId PIGEON =
         new RobotDeviceId(SwerveConstants.kPigeonId, SwerveConstants.kCANbusName, null);
-
-    public static final RobotDeviceId PIVOT = new RobotDeviceId(31, "", null);
 
     /* SUBSYSTEM CAN DEVICE IDS */
     // This is where mechanism subsystem devices are defined (Including ID, bus, and power port)
